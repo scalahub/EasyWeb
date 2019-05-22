@@ -1,7 +1,7 @@
 package org.sh.easyweb.test
 
 import org.sh.reflect.test._
-import org.sh.reflect.web.client.WebQueryMaker
+import org.sh.easyweb.client.WebQueryMaker
 import org.sh.reflect.Proxy
 
 // see CommonReflectSocket for a better test. For the below test, the WebQueryResponder needs to be running, which needs
