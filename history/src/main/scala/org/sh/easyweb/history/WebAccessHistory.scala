@@ -8,6 +8,7 @@ import org.sh.db.BetterDB._
 import org.sh.utils.common.Util._
 
 object WebAccessHistory {
+
   def getAccessLog(from:Long, to:Long, max:Int,offset:Long) =
     accessDB.select(
       reqCol, timeCol, srcCol, internalIDCol
@@ -15,6 +16,7 @@ object WebAccessHistory {
       timeCol >= from,
       timeCol <= to
     ).max(max).offset(offset).orderBy(timeCol.decreasing).as(toAccess)
+
   def purgeAccessLog(olderThanDays:Int, password:String) = {
     if (password != "wnw4uzmq29sw3du$2wz13") throw new Exception("invalid password")
     if (olderThanDays < 7) throw new Exception("Min days is 7")
@@ -22,9 +24,11 @@ object WebAccessHistory {
     val toTime = getTime - millis
     accessDB.deleteWhere(timeCol <= toTime)
   }
+
   def getResponse(internalID:String) =
     accessDB.select(respCol).where(internalIDCol === internalID).firstAs(_.as[Array[Byte]]).map{fromBytes}.headOption
-  def getAccessLogForMethod(methodName:String, from:Long, to:Long, max:Int,offset:Long) = 
+
+  def getAccessLogForMethod(methodName:String, from:Long, to:Long, max:Int,offset:Long) =
     accessDB.select(
       reqCol, timeCol, srcCol, internalIDCol
     ).where(

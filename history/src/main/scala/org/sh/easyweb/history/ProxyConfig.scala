@@ -7,6 +7,7 @@ import org.sh.easyweb.HTMLClientCodeGenerator
 import org.sh.reflect.DefaultTypeHandler
 import org.sh.reflect.Proxy
 
+@deprecated("Seems unused as of now. Find its purpose or remove", "21 May 2019")
 trait WebProxyConfig extends TraitPlaintextFileProperties {
   lazy val propertyFile = "misc.properties"
   
@@ -32,6 +33,8 @@ trait WebProxyConfig extends TraitPlaintextFileProperties {
   
   val autoStart:List[Object]
 }
+
+@deprecated("Seems unused as of now. Find its purpose or remove", "21 May 2019")
 class InitializeProxyConfig(config:WebProxyConfig){
   import config._
   formObjects.foreach(Proxy.addProcessor(prefixString, _, DefaultTypeHandler, true))
@@ -41,7 +44,9 @@ class InitializeProxyConfig(config:WebProxyConfig){
     println(s" [${this.getClass.getName}] started ${c.getClass.getCanonicalName}")  
   }
 }
-class HTMLGenerator(config:WebProxyConfig) {  
+
+@deprecated("Seems unused as of now. Find its purpose or remove", "21 May 2019")
+class HTMLGenerator(config:WebProxyConfig) {
   import config._
   def main(args:Array[String]) { 
     println("Auto-Generating file")
