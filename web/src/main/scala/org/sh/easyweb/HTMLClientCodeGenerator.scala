@@ -11,6 +11,15 @@ import org.sh.easyweb.server.FileStore
 import org.sh.easyweb.server.FileStoreNIO
 import org.sh.utils.common.file.{Util => FUtil}
 
+/*
+  Parameters
+    initRefs: List of objects to process (generate HTML for)
+    postUrl: The url to use for the servlet that responds to queries,
+    appInfo: some general info printed at top of HTML
+    optIsl: List of inputstreams inside an option (other constructors have a simpler approach; use them)
+    allowOnlyKnownTypes: If processing encounters any unknown parameter or return types, it should throw and error
+    hideUnknownTypes: If processing encounters any unknown types, it should hide them
+ */
 class HTMLClientCodeGenerator(initRefs: List[AnyRef], postUrl:String, appInfo:String, optIsl:Option[List[InputStream]], allowOnlyKnownTypes:Boolean, hideUnknownTypes:Boolean) {
   FileStore // just access file-store to ensure type handlers for java.io.File are added
   FileStoreNIO // just access file-store to ensure type handlers for java.io.File are added
@@ -32,9 +41,9 @@ class HTMLClientCodeGenerator(initRefs: List[AnyRef], postUrl:String, appInfo:St
     autoGenerateToFile(file, dir, prefix)
   }
   // uses html file name supplied in param
-  def autoGenerateToFile(fileName:String, dir:String, prefix:String=defaultPrefix)(implicit ignoreMethods:List[(String, String)] = Nil) = {
+  def autoGenerateToFile(fileNamePrefix:String, dir:String, prefix:String=defaultPrefix)(implicit ignoreMethods:List[(String, String)] = Nil) = {
     // assert(prefix != "", "prefix cannot be empty.") // actually empty prefix is not a problem here, unlike in ServerCodeGenerator
-    val fullFileName = fileName+"AutoGen"+".html"
+    val fullFileName = fileNamePrefix+"AutoGen"+".html"
     val file = dir+"/"+fullFileName
     println(s"[reflect] prefix = $prefix")
     println("Writing HTML file: "+file)

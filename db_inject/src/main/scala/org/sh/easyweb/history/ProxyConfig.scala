@@ -5,7 +5,7 @@ import org.sh.utils.common.file.PlaintextFileProperties
 import org.sh.utils.common.file.TraitPlaintextFileProperties
 import org.sh.easyweb.HTMLClientCodeGenerator
 import org.sh.reflect.DefaultTypeHandler
-import org.sh.reflect.Proxy
+import org.sh.reflect.EasyProxy
 
 @deprecated("Seems unused as of now. Find its purpose or remove", "21 May 2019")
 trait WebProxyConfig extends TraitPlaintextFileProperties {
@@ -37,9 +37,9 @@ trait WebProxyConfig extends TraitPlaintextFileProperties {
 @deprecated("Seems unused as of now. Find its purpose or remove", "21 May 2019")
 class InitializeProxyConfig(config:WebProxyConfig){
   import config._
-  formObjects.foreach(Proxy.addProcessor(prefixString, _, DefaultTypeHandler, true))
-  formClasses.foreach(Proxy.addProcessor(prefixString, _, DefaultTypeHandler, true))
-  restrict.foreach(Proxy.preventMethod)
+  formObjects.foreach(EasyProxy.addProcessor(prefixString, _, DefaultTypeHandler, true))
+  formClasses.foreach(EasyProxy.addProcessor(prefixString, _, DefaultTypeHandler, true))
+  restrict.foreach(EasyProxy.preventMethod)
   autoStart.foreach{c =>
     println(s" [${this.getClass.getName}] started ${c.getClass.getCanonicalName}")  
   }

@@ -48,37 +48,30 @@ import org.sh.reflect.DefaultTypeHandler
     (file, fileID)
   }  
   
-//  val isPlayMode = true
+  //  val isPlayMode = true
   val jettyLink = "?fileID="
   val playLink = "/"
   val actualLink = if (isPlayMode) playLink else jettyLink
     
   
-  //  DefaultTypeHandler.addType[File](classOf[File], getFile, putFile)
-  // '<a target="_blank" href="/getfile?fileID='+x+'">'+x+'</a>'
   def getFileLink(file:File) = {
     val fileID = putFile(file)
-    //    val str1 = scala.xml.Unparsed("""_blank""")                                  
-    //    val str2 = scala.xml.Unparsed("/getfile?fileID="+fileID)
-    
     //    <a target="_blank" href={"/getfile?fileID="+fileID}>{fileID}</a>.toString
-    // val html = s"""<a target='_blank' href='/getfile?fileID=$fileID'>$fileID</a>"""
     val html = s"""<a target='_blank' href='/getfile$actualLink$fileID'>$fileID</a>"""
-    //    <a target={str1} href={str2}>{fileID}</a>.toString
     html
   }
   def getFileLinks(files:Array[File]) = JSONUtil.encodeJSONArray(files.map(getFileLink)).toString
-  //  def getFileLinks(files:Seq[File]) = JSONUtil.encodeJSONArray(files.toArray.map(getFileLink)).toString
-  //  def getFileLinks(files:Set[File]) = JSONUtil.encodeJSONArray(files.toArray.map(getFileLink)).toString
   def getFileLinks(files:Iterable[File]) = JSONUtil.encodeJSONArray(files.toArray.map(getFileLink)).toString
-  
+
+  /*
+  // below code for deleting files. Commented out for now
   doEvery30Mins{
     tryIt{
       val retainAfter = getTime - maxRetainTime
       val files = org.sh.utils.common.file.Util.getAllFiles(uploadDir, null, true).map(new File(_)).filter{f =>
         f.lastModified < retainAfter && f.isFile
       } // extension null returns all files
-      files.foreach{f => 
+      files.foreach{f =>
         tryIt(f.delete)
         tryIt(f.getParentFile.delete)
       }
@@ -86,6 +79,7 @@ import org.sh.reflect.DefaultTypeHandler
       // http://www.mkyong.com/java/how-to-get-the-file-last-modified-date-in-java/
     }
   }
+  */
   println("initializing file store")
   
 }

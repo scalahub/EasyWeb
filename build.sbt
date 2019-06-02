@@ -1,3 +1,4 @@
+
 name := "EasyWeb"
 
 version := "0.1"
@@ -10,8 +11,18 @@ lazy val EasyMirror = RootProject(uri("https://github.com/scalahub/EasyMirror.gi
 lazy val BetterDB = RootProject(uri("https://github.com/scalahub/BetterDB.git"))
 //lazy val BetterDB = RootProject(uri("../BetterDB"))
 
-lazy val web = (project in file("web")).dependsOn(EasyMirror)
+lazy val web = (project in file("web")).dependsOn(
+  EasyMirror % "compile->compile;test->test"
+)
 
-lazy val history = (project in file("history")).dependsOn(web, BetterDB)
+lazy val db_inject = (project in file("db_inject")).dependsOn(web, BetterDB)
 
-lazy val root = project in file(".") dependsOn (history)
+lazy val root = (project in file(".")).dependsOn(
+  db_inject
+)
+
+lazy val demo = (project in file("demo")).dependsOn(
+  root
+).enablePlugins(JettyPlugin).settings(
+  mainClass in (Compile, run) := Some("org.sh.easyweb.MyHTMLGen")
+)

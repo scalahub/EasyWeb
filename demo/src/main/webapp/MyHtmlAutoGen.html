@@ -1,200 +1,28 @@
-package org.sh.easyweb
+<!DOCTYPE html>
+<!--
 
-//import org.sh.reflect.DataStructures.Param
-import org.sh.reflect.DataStructures.Param
-import org.sh.reflect.DataStructures.ScalaMethod
-import org.sh.reflect.Util._
-import org.sh.reflect.CodeGenUtil._
-import org.sh.utils.common.Util.toDateString
+======== auto-generated code ========
+WARNING !!! Do not edit! 
+Otherwise your changes may be lost the next time this file is generated.
+  
+Instead edit the file that generated this code. Refer below for details
 
-object HTMLConstants {
-//  def clean(s:String) = s.replace("$", "")
-  def getPage(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)], appInfo:String, postUrl:String, callee:AnyRef, pageTitle:String)  = { 
-    val info = getInfo(mainMethods, appInfo)
-    
-"<!DOCTYPE html>\n"+"<!--\n"+preamble(callee)+"-->\n"+
-s"""
+Class that generated this code: org.sh.easyweb.HTMLClientCodeGenerator
+
+Stacktrace of the call is given below:
+
+org.sh.reflect.CodeGenUtil$:CodeGenUtil.scala:80
+org.sh.easyweb.HTMLConstants$:HTMLConstants.scala:15
+org.sh.easyweb.HTMLClientCodeGenerator:HTMLClientCodeGenerator.scala:118
+org.sh.easyweb.HTMLClientCodeGenerator:HTMLClientCodeGenerator.scala:81
+-->
+
 <html>
 <head>
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <!--<meta content="utf-8" http-equiv="encoding">-->
-<title>$pageTitle</title>
-"""+style+"\n"+js(postUrl)+"</head>\n<body onload='changeBGIfLocalhost();'>"+info+classBody(mainMethods)+"\n</body>\n</html>"
-  }
-  def methodsBody(methods:List[(ScalaMethod, AnyRef)], parent:String) = methods.foldLeft("")((x, y)=> x + "\n"+methodBody(y._1, y._2, parent))
-  def classBody(classMethods:List[(List[(ScalaMethod, AnyRef)], String)]) = {
-    val sortedMethods = classMethods.map {
-      case (list, className) => (list.sortWith{
-            case ((method1, _), (method2, _)) => method1.name < method2.name
-          }, className
-        )
-    }
-    sortedMethods.foldLeft("")((x, y) => x + "\n<h3 id='"+y._2+"'>"+y._2+" ("+y._1.size+")</h3>"+methodTable(y._1, y._2)+"\n<br>"+methodsBody(y._1, y._2)+"<hr>")
-  }
-  def methodTable(methods:List[(ScalaMethod, AnyRef)], parent:String) = {
-     "<table border=\"1\" style=\"width:100%\" id=\""+parent+
-     """.Methods">
-      <tr>
-        <th>Displayed Name</th>
-        <th>Original Name</th>
-        <th>Parameters</th>
-        <th>Return Type</th>
-      </tr>"""+
-      methods.map{
-//        case (sm, c) => "<tr><td><a href=\"#"+clean(c.getClass.getCanonicalName)+"."+sm.name+"\">"+sm.name+
-        case (sm, c) => "<tr><td><a href=\"#"+parent+"."+sm.name+"\">"+sm.name+
-          "</a></td><td>"+sm.origName+"</td><td>"+sm.toScalaParamString+"</td><td>"+sm.cleanReturnedClassName+"</td></tr>"
-      }.mkString+"""
-    </table>"""
-  }
-  def getMainClassInfo(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)]) = 
-    mainMethods.map{case (fp, c) => (c, fp.size)}
+<title>Auto Generated</title>
 
-  def getInfo(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)], appInfo:String) = {
-    val mainClasses = getMainClassInfo(mainMethods)
-    val classesInfo = mainClasses.map{
-      case (className, methodCount) => 
-        "<a href=\"#"+className+"\">"+
-        className+"</a>"+" (<a href=\"#"+className+".Methods\">"+methodCount+"</a>)"
-    }
-    """  
-    <h1 id='top'>Classes ("""+mainClasses.size+""")</h1>
-        """+(if (classesInfo.size > 0) classesInfo.reduceLeft(_+"<br>\n"+_) else "")+"""
-    <br>
-      Total methods found: """+mainMethods.flatMap(_._1).size+"""
-    <br><hr>"""+appInfo.replace("\n", "<br>")+"""
-    <br>
-    <hr>
-    """    
-  }
-  
-  def paramInputBox(formID:String, x:Param) = {
-    val additionalText = if (x.paraType.getClassName == "java.io.File") {
-      """value="" style="background-color:blue; color: #DCDAD1;" READONLY"""
-    } else ""   
-    
-    x.paraType.getClassName match {
-      case any if any.endsWith("]") => // array .. see http://stackoverflow.com/q/3442090/243233
-        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="[]"/><br>"""        
-        
-      case "long" if x.info.map(_ == "date").getOrElse(false) || x.paraName == "from" || x.paraName == "to" || x.paraName == "time" =>
-        val paraName = x.paraName
-        val inputID = formID+"_"+paraName
-        val inputIDInputName = formID+"_"+paraName+"_input"
-        val inputDateSelectorID = inputIDInputName+"_selector"
-        val inputLongID = inputIDInputName+"_long"
-        
-        val sdf = new java.text.SimpleDateFormat("yyyy-MM-dd")
-        
-        val maxTime = 32472144000000L
-        
-        s"""   </label>
-    <div id="$inputDateSelectorID" > 
-      <input type="date" name="$inputID" onchange="dateSelect('$inputID', this.value);" 
-       value="${sdf.format(if (x.paraName == "to") maxTime else 0L)}">
-      <a href="javascript:void(0);" onclick="toggleHide('$inputDateSelectorID', '$inputLongID');">Epoch</a>
-    </div>
-    <div id="$inputLongID" style="display:none;"> 
-      <input id="$inputID" type="text" name="$inputIDInputName" 
-       value="${if (x.paraName == "to") maxTime else 0L}">
-      <a href="javascript:void(0);" onclick="toggleHide('$inputDateSelectorID', '$inputLongID');">Date</a>
-    </div>
-   <label>"""
-
-      case "long"|"int" if x.paraName == "offset" =>
-        val value = 0
-        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="$value"/><br>"""        
-      case "int" if x.paraName == "max" || x.paraName == "maxRows" =>
-        val value = 10
-        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="$value"/><br>"""        
-      case "boolean" =>
-        val paraName = x.paraName
-        val inputID = formID+"_"+paraName
-        val inputIDInputName = formID+"_"+paraName+"_input"
-        
-        val default = x.info match{
-          case Some("false") => false
-          case _ => true
-        }
-        def trueChecked = if (default) """ checked="checked" """ else ""
-        def falseChecked = if (!default) """ checked="checked" """ else ""
-        
-        s"""   </label>
-    <div>
-      <input type="radio" ${trueChecked} name="$inputID" onclick="boolSelect('$inputID', this.value);" value="true">Yes   
-      <input type="radio" ${falseChecked} name="$inputID" onclick="boolSelect('$inputID', this.value);" value="false">No
-    </div>
-    <input id="$inputID" type="hidden" name="$inputIDInputName" value="${default.toString}"><br>
-   <label><br/>"""
-
-      case "org.sh.easyweb.Text" =>
-        val default = if (x.paraName != "INFO") x.info.getOrElse("").replace("\\n", "\n").replace("\\\\", "\\") else ""
-        """    <textarea id=""""+formID+"_"+x.paraName+"""" name=""""+x.paraName+s"""">$default</textarea><br>"""
-      case other =>
-        val value = if (x.paraName != "INFO") x.info.getOrElse("") else ""
-        // $INFO$ is a special variable inside a function,
-        // but the "infoVar" of a parameter called "INFO" will also be called $INFO$.
-        // Hence we ignore such parameters
-
-        s"""    <input id=""""+formID+"_"+x.paraName+s"""" value="$value" type="text" name=""""+x.paraName+s"""" $additionalText/><br>"""
-    }
-  }
-  def fileInputBox(formID:String, x:Param) = {
-    if (x.paraType.getClassName == "java.io.File" || x.paraType.getClassName == "java.nio.file.Path") {
-      val inputID = formID+"_"+x.paraName           
-      val fileInputID = inputID+"_file"             
-      val fileInputIDUpload = fileInputID+"_upload" 
-      val inputName = x.paraName+"_file"
-      """
-    <label><span></span>Please upload a file. Once uploaded, the above box will contain an ID</label>
-    <label><span></span>
-      <input id=""""+fileInputID+"""" type="file" name=""""+inputName+""""/><br>
-    </label>
-    <label><span></span>
-      <input id=""""+fileInputIDUpload+"""" value="upload" type="button" onclick='JavaScript:uploadFileAndGetID(""""+fileInputID+"""",""""+inputID+"""")'> (<a href="javascript:void(0);" onclick="document.getElementById('"""+inputID+"""').value=''">clear upload</a>)
-    </label>
-  <hr>
-      """
-    } else ""      
-  }
-  def isReturnTypeFile(sm:ScalaMethod) = {
-    if (sm.returnType.getClassName == "java.io.File") {}
-  }
-  def simpleClassName(fqdn:String) = {val i = fqdn.lastIndexOf(".");if (i < 0) fqdn else fqdn.drop(i+1)}
-  def methodBody(sm:ScalaMethod, cls:AnyRef, parent:String) = {
-    val formID = parent+"."+sm.name
-    def parentTag = "<a href=\"#"+parent+"\">parent</a>"
-    val parentClass = sm.parentClassName
-    val pid = getDefaultPid(cls)
-    val ansID = parent+"_"+sm.name+"_Ans"
-    val infoStr = if (sm.methodInfo.isDefined)
-      """<h4><b>Info</b>: """+sm.methodInfo.get.replace("\\n", "<br>")+"""</h4>"""
-    else ""
-    
-    val resultCSSClass = if (sm.returnType.getClassName == "java.io.File") "file" else "alphaNum"
-    
-    """
-<form id=""""+formID+"""" class="elegant-aero">"""+
-    //"\n\n <h1>"+sm.name+"<br><small>["+parent+"."+sm.origName+"]</small></h1>"+infoStr+
-    "\n\n <h1><small>"+parent+"."+sm.origName+"</small></h1>"+infoStr+
-    sm.params.foldLeft("")((y, x) => y + "\n\n   <label>\n    <span>"+x.paraName+" ["+subst(simpleClassName(x.paraType.getClassName))+"]:</span>\n"+
-       paramInputBox(formID, x)+"\n   </label>\n"+fileInputBox(formID, x))+
-       """
-   <label>
-     <span></span>
-     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend(""""+pid+"""",""""+sm.name+"""",""""+formID+"""","""+jsArray(sm)+""",""""+ansID+"""")'>
-   </label>"""+"\n"+ 
-       """ 
-   <div id=""""+ansID+"""" class=""""+resultCSSClass+"""">"""+"</div>\n"+
-  "</form>\n"+topTag+" "+parentTag+"\n"
-
-  }
-  def topTag = "<a href=\"#top\">top</a>"
-  def jsArray(sm:ScalaMethod) = "["+
-      (if (sm.params.size == 0) "" else sm.params.map("\""+_.paraName+"\"").reduceLeft(_+","+_))+"]"
-    
-  val style = 
-  """
 <style type="text/css">
 /* Elegant Aero */
 .elegant-aero {
@@ -290,9 +118,8 @@ p {
     line-height: 20px;
 }  
 </style>
-  """
-  def js(postUrl:String) = 
-  """
+  
+
 <script type="text/javascript">
 /**
  * JavaScript format string function
@@ -659,18 +486,332 @@ function changeBGIfLocalhost() {
     }
 }
 </script>
-"""
-}
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
+</head>
+<body onload='changeBGIfLocalhost();'>  
+    <h1 id='top'>Classes (4)</h1>
+        <a href="#org.sh.easyweb.MyFirstClass">org.sh.easyweb.MyFirstClass</a> (<a href="#org.sh.easyweb.MyFirstClass.Methods">1</a>)<br>
+<a href="#org.sh.easyweb.MyFirstObject">org.sh.easyweb.MyFirstObject</a> (<a href="#org.sh.easyweb.MyFirstObject.Methods">2</a>)<br>
+<a href="#org.sh.easyweb.MySecondClass">org.sh.easyweb.MySecondClass</a> (<a href="#org.sh.easyweb.MySecondClass.Methods">3</a>)<br>
+<a href="#org.sh.easyweb.MySecondObject">org.sh.easyweb.MySecondObject</a> (<a href="#org.sh.easyweb.MySecondObject.Methods">5</a>)
+    <br>
+      Total methods found: 11
+    <br><hr>
+    <br>
+    <hr>
+    
+<h3 id='org.sh.easyweb.MyFirstClass'>org.sh.easyweb.MyFirstClass (1)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MyFirstClass.Methods">
+      <tr>
+        <th>Displayed Name</th>
+        <th>Original Name</th>
+        <th>Parameters</th>
+        <th>Return Type</th>
+      </tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr>
+    </table>
+<br>
+
+<form id="org.sh.easyweb.MyFirstClass.InfoVars" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MyFirstClass.myMethod_InfoVars</small></h1><h4><b>Info</b>: Info about someMethod. Check that choice is 'false' and value is '29'</h4>
+
+   <label>
+    <span>choice [Boolean]:</span>
+   </label>
+    <div>
+      <input type="radio"  name="org.sh.easyweb.MyFirstClass.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MyFirstClass.InfoVars_choice', this.value);" value="true">Yes   
+      <input type="radio"  checked="checked"  name="org.sh.easyweb.MyFirstClass.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MyFirstClass.InfoVars_choice', this.value);" value="false">No
+    </div>
+    <input id="org.sh.easyweb.MyFirstClass.InfoVars_choice" type="hidden" name="org.sh.easyweb.MyFirstClass.InfoVars_choice_input" value="false"><br>
+   <label><br/>
+   </label>
+
+
+   <label>
+    <span>value [Int]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.InfoVars_value" value="29" type="text" name="value" /><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("JP0FxJmaLGv1DWB3","InfoVars","org.sh.easyweb.MyFirstClass.InfoVars",["choice","value"],"org.sh.easyweb.MyFirstClass_InfoVars_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MyFirstClass_InfoVars_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MyFirstClass">parent</a>
+<hr>
+<h3 id='org.sh.easyweb.MyFirstObject'>org.sh.easyweb.MyFirstObject (2)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MyFirstObject.Methods">
+      <tr>
+        <th>Displayed Name</th>
+        <th>Original Name</th>
+        <th>Parameters</th>
+        <th>Return Type</th>
+      </tr><tr><td><a href="#org.sh.easyweb.MyFirstObject.Choice">Choice</a></td><td>myMethod_Choice</td><td>(choice:boolean)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MyFirstObject.FileDownload">FileDownload</a></td><td>myMethod_FileDownload</td><td>(file:java.io.File)</td><td>java.io.File</td></tr>
+    </table>
+<br>
+
+<form id="org.sh.easyweb.MyFirstObject.Choice" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MyFirstObject.myMethod_Choice</small></h1>
+
+   <label>
+    <span>choice [Boolean]:</span>
+   </label>
+    <div>
+      <input type="radio"  checked="checked"  name="org.sh.easyweb.MyFirstObject.Choice_choice" onclick="boolSelect('org.sh.easyweb.MyFirstObject.Choice_choice', this.value);" value="true">Yes   
+      <input type="radio"  name="org.sh.easyweb.MyFirstObject.Choice_choice" onclick="boolSelect('org.sh.easyweb.MyFirstObject.Choice_choice', this.value);" value="false">No
+    </div>
+    <input id="org.sh.easyweb.MyFirstObject.Choice_choice" type="hidden" name="org.sh.easyweb.MyFirstObject.Choice_choice_input" value="true"><br>
+   <label><br/>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("8cDCTJe9oRvodbt","Choice","org.sh.easyweb.MyFirstObject.Choice",["choice"],"org.sh.easyweb.MyFirstObject_Choice_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MyFirstObject_Choice_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MyFirstObject">parent</a>
+
+
+<form id="org.sh.easyweb.MyFirstObject.FileDownload" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MyFirstObject.myMethod_FileDownload</small></h1><h4><b>Info</b>: Should return the same file back</h4>
+
+   <label>
+    <span>file [File]:</span>
+    <input id="org.sh.easyweb.MyFirstObject.FileDownload_file" value="" type="text" name="file" value="" style="background-color:blue; color: #DCDAD1;" READONLY/><br>
+   </label>
+
+    <label><span></span>Please upload a file. Once uploaded, the above box will contain an ID</label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MyFirstObject.FileDownload_file_file" type="file" name="file_file"/><br>
+    </label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MyFirstObject.FileDownload_file_file_upload" value="upload" type="button" onclick='JavaScript:uploadFileAndGetID("org.sh.easyweb.MyFirstObject.FileDownload_file_file","org.sh.easyweb.MyFirstObject.FileDownload_file")'> (<a href="javascript:void(0);" onclick="document.getElementById('org.sh.easyweb.MyFirstObject.FileDownload_file').value=''">clear upload</a>)
+    </label>
+  <hr>
+      
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("8cDCTJe9oRvodbt","FileDownload","org.sh.easyweb.MyFirstObject.FileDownload",["file"],"org.sh.easyweb.MyFirstObject_FileDownload_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MyFirstObject_FileDownload_Ans" class="file"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MyFirstObject">parent</a>
+<hr>
+<h3 id='org.sh.easyweb.MySecondClass'>org.sh.easyweb.MySecondClass (3)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondClass.Methods">
+      <tr>
+        <th>Displayed Name</th>
+        <th>Original Name</th>
+        <th>Parameters</th>
+        <th>Return Type</th>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondClass.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr>
+    </table>
+<br>
+
+<form id="org.sh.easyweb.MySecondClass.FileUpload" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondClass.myMethod_FileUpload</small></h1><h4><b>Info</b>: File upload test. Should print the size of file</h4>
+
+   <label>
+    <span>file [File]:</span>
+    <input id="org.sh.easyweb.MySecondClass.FileUpload_file" value="This box will contain a file id after upload" type="text" name="file" value="" style="background-color:blue; color: #DCDAD1;" READONLY/><br>
+   </label>
+
+    <label><span></span>Please upload a file. Once uploaded, the above box will contain an ID</label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MySecondClass.FileUpload_file_file" type="file" name="file_file"/><br>
+    </label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MySecondClass.FileUpload_file_file_upload" value="upload" type="button" onclick='JavaScript:uploadFileAndGetID("org.sh.easyweb.MySecondClass.FileUpload_file_file","org.sh.easyweb.MySecondClass.FileUpload_file")'> (<a href="javascript:void(0);" onclick="document.getElementById('org.sh.easyweb.MySecondClass.FileUpload_file').value=''">clear upload</a>)
+    </label>
+  <hr>
+      
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","FileUpload","org.sh.easyweb.MySecondClass.FileUpload",["file"],"org.sh.easyweb.MySecondClass_FileUpload_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondClass_FileUpload_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondClass">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondClass.InfoVars" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondClass.myMethod_InfoVars</small></h1><h4><b>Info</b>: Info about someMethod. Check that choice is 'false' and value is '29'</h4>
+
+   <label>
+    <span>choice [Boolean]:</span>
+   </label>
+    <div>
+      <input type="radio"  name="org.sh.easyweb.MySecondClass.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MySecondClass.InfoVars_choice', this.value);" value="true">Yes   
+      <input type="radio"  checked="checked"  name="org.sh.easyweb.MySecondClass.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MySecondClass.InfoVars_choice', this.value);" value="false">No
+    </div>
+    <input id="org.sh.easyweb.MySecondClass.InfoVars_choice" type="hidden" name="org.sh.easyweb.MySecondClass.InfoVars_choice_input" value="false"><br>
+   <label><br/>
+   </label>
+
+
+   <label>
+    <span>value [Int]:</span>
+    <input id="org.sh.easyweb.MySecondClass.InfoVars_value" value="29" type="text" name="value" /><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","InfoVars","org.sh.easyweb.MySecondClass.InfoVars",["choice","value"],"org.sh.easyweb.MySecondClass_InfoVars_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondClass_InfoVars_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondClass">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondClass.MyType" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondClass.myMethod_MyType</small></h1>
+
+   <label>
+    <span>myType [MyType]:</span>
+    <input id="org.sh.easyweb.MySecondClass.MyType_myType" value="" type="text" name="myType" /><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","MyType","org.sh.easyweb.MySecondClass.MyType",["myType"],"org.sh.easyweb.MySecondClass_MyType_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondClass_MyType_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondClass">parent</a>
+<hr>
+<h3 id='org.sh.easyweb.MySecondObject'>org.sh.easyweb.MySecondObject (5)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondObject.Methods">
+      <tr>
+        <th>Displayed Name</th>
+        <th>Original Name</th>
+        <th>Parameters</th>
+        <th>Return Type</th>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondObject.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Restricted">Restricted</a></td><td>myMethod_Restricted</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.TextBox">TextBox</a></td><td>myMethod_TextBox</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr>
+    </table>
+<br>
+
+<form id="org.sh.easyweb.MySecondObject.FileUpload" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_FileUpload</small></h1><h4><b>Info</b>: File upload test. Should print the size of file</h4>
+
+   <label>
+    <span>file [File]:</span>
+    <input id="org.sh.easyweb.MySecondObject.FileUpload_file" value="This box will contain a file id after upload" type="text" name="file" value="" style="background-color:blue; color: #DCDAD1;" READONLY/><br>
+   </label>
+
+    <label><span></span>Please upload a file. Once uploaded, the above box will contain an ID</label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MySecondObject.FileUpload_file_file" type="file" name="file_file"/><br>
+    </label>
+    <label><span></span>
+      <input id="org.sh.easyweb.MySecondObject.FileUpload_file_file_upload" value="upload" type="button" onclick='JavaScript:uploadFileAndGetID("org.sh.easyweb.MySecondObject.FileUpload_file_file","org.sh.easyweb.MySecondObject.FileUpload_file")'> (<a href="javascript:void(0);" onclick="document.getElementById('org.sh.easyweb.MySecondObject.FileUpload_file').value=''">clear upload</a>)
+    </label>
+  <hr>
+      
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","FileUpload","org.sh.easyweb.MySecondObject.FileUpload",["file"],"org.sh.easyweb.MySecondObject_FileUpload_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_FileUpload_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondObject.InfoVars" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_InfoVars</small></h1><h4><b>Info</b>: Info about someMethod. Check that choice is 'false' and value is '29'</h4>
+
+   <label>
+    <span>choice [Boolean]:</span>
+   </label>
+    <div>
+      <input type="radio"  name="org.sh.easyweb.MySecondObject.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MySecondObject.InfoVars_choice', this.value);" value="true">Yes   
+      <input type="radio"  checked="checked"  name="org.sh.easyweb.MySecondObject.InfoVars_choice" onclick="boolSelect('org.sh.easyweb.MySecondObject.InfoVars_choice', this.value);" value="false">No
+    </div>
+    <input id="org.sh.easyweb.MySecondObject.InfoVars_choice" type="hidden" name="org.sh.easyweb.MySecondObject.InfoVars_choice_input" value="false"><br>
+   <label><br/>
+   </label>
+
+
+   <label>
+    <span>value [Int]:</span>
+    <input id="org.sh.easyweb.MySecondObject.InfoVars_value" value="29" type="text" name="value" /><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","InfoVars","org.sh.easyweb.MySecondObject.InfoVars",["choice","value"],"org.sh.easyweb.MySecondObject_InfoVars_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_InfoVars_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondObject.MyType" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_MyType</small></h1>
+
+   <label>
+    <span>myType [MyType]:</span>
+    <input id="org.sh.easyweb.MySecondObject.MyType_myType" value="" type="text" name="myType" /><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","MyType","org.sh.easyweb.MySecondObject.MyType",["myType"],"org.sh.easyweb.MySecondObject_MyType_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_MyType_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondObject.Restricted" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_Restricted</small></h1><h4><b>Info</b>: Accepts text box</h4>
+
+   <label>
+    <span>text [Text]:</span>
+    <textarea id="org.sh.easyweb.MySecondObject.Restricted_text" name="text"></textarea><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","Restricted","org.sh.easyweb.MySecondObject.Restricted",["text"],"org.sh.easyweb.MySecondObject_Restricted_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_Restricted_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+
+
+<form id="org.sh.easyweb.MySecondObject.TextBox" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_TextBox</small></h1><h4><b>Info</b>: Accepts text box</h4>
+
+   <label>
+    <span>text [Text]:</span>
+    <textarea id="org.sh.easyweb.MySecondObject.TextBox_text" name="text"></textarea><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","TextBox","org.sh.easyweb.MySecondObject.TextBox",["text"],"org.sh.easyweb.MySecondObject_TextBox_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_TextBox_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+<hr>
+</body>
+</html>
