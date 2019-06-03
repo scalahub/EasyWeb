@@ -489,25 +489,56 @@ function changeBGIfLocalhost() {
 </head>
 <body onload='changeBGIfLocalhost();'>  
     <h1 id='top'>Classes (4)</h1>
-        <a href="#org.sh.easyweb.MyFirstClass">org.sh.easyweb.MyFirstClass</a> (<a href="#org.sh.easyweb.MyFirstClass.Methods">1</a>)<br>
+        <a href="#org.sh.easyweb.MyFirstClass">org.sh.easyweb.MyFirstClass</a> (<a href="#org.sh.easyweb.MyFirstClass.Methods">2</a>)<br>
 <a href="#org.sh.easyweb.MyFirstObject">org.sh.easyweb.MyFirstObject</a> (<a href="#org.sh.easyweb.MyFirstObject.Methods">2</a>)<br>
-<a href="#org.sh.easyweb.MySecondClass">org.sh.easyweb.MySecondClass</a> (<a href="#org.sh.easyweb.MySecondClass.Methods">3</a>)<br>
-<a href="#org.sh.easyweb.MySecondObject">org.sh.easyweb.MySecondObject</a> (<a href="#org.sh.easyweb.MySecondObject.Methods">5</a>)
+<a href="#org.sh.easyweb.MySecondClass">org.sh.easyweb.MySecondClass</a> (<a href="#org.sh.easyweb.MySecondClass.Methods">4</a>)<br>
+<a href="#org.sh.easyweb.MySecondObject">org.sh.easyweb.MySecondObject</a> (<a href="#org.sh.easyweb.MySecondObject.Methods">6</a>)
     <br>
-      Total methods found: 11
+      Total methods found: 14
     <br><hr>
     <br>
     <hr>
     
-<h3 id='org.sh.easyweb.MyFirstClass'>org.sh.easyweb.MyFirstClass (1)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MyFirstClass.Methods">
+<h3 id='org.sh.easyweb.MyFirstClass'>org.sh.easyweb.MyFirstClass (2)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MyFirstClass.Methods">
       <tr>
         <th>Displayed Name</th>
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr>
     </table>
 <br>
+
+<form id="org.sh.easyweb.MyFirstClass.Arrays" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MyFirstClass.myMethod_Arrays</small></h1>
+
+   <label>
+    <span>a [Array[Int]]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.Arrays_a" type="text" name="a" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>b [Array[String]]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.Arrays_b" type="text" name="b" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>c [Array[Boolean]]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.Arrays_c" type="text" name="c" value="[]"/><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("JP0FxJmaLGv1DWB3","Arrays","org.sh.easyweb.MyFirstClass.Arrays",["a","b","c"],"org.sh.easyweb.MyFirstClass_Arrays_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MyFirstClass_Arrays_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MyFirstClass">parent</a>
+
 
 <form id="org.sh.easyweb.MyFirstClass.InfoVars" class="elegant-aero">
 
@@ -601,15 +632,46 @@ function changeBGIfLocalhost() {
 </form>
 <a href="#top">top</a> <a href="#org.sh.easyweb.MyFirstObject">parent</a>
 <hr>
-<h3 id='org.sh.easyweb.MySecondClass'>org.sh.easyweb.MySecondClass (3)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondClass.Methods">
+<h3 id='org.sh.easyweb.MySecondClass'>org.sh.easyweb.MySecondClass (4)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondClass.Methods">
       <tr>
         <th>Displayed Name</th>
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MySecondClass.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr>
     </table>
 <br>
+
+<form id="org.sh.easyweb.MySecondClass.Arrays" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondClass.myMethod_Arrays</small></h1>
+
+   <label>
+    <span>a [Array[Int]]:</span>
+    <input id="org.sh.easyweb.MySecondClass.Arrays_a" type="text" name="a" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>b [Array[String]]:</span>
+    <input id="org.sh.easyweb.MySecondClass.Arrays_b" type="text" name="b" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>c [Array[Boolean]]:</span>
+    <input id="org.sh.easyweb.MySecondClass.Arrays_c" type="text" name="c" value="[]"/><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","Arrays","org.sh.easyweb.MySecondClass.Arrays",["a","b","c"],"org.sh.easyweb.MySecondClass_Arrays_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondClass_Arrays_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondClass">parent</a>
+
 
 <form id="org.sh.easyweb.MySecondClass.FileUpload" class="elegant-aero">
 
@@ -688,15 +750,46 @@ function changeBGIfLocalhost() {
 </form>
 <a href="#top">top</a> <a href="#org.sh.easyweb.MySecondClass">parent</a>
 <hr>
-<h3 id='org.sh.easyweb.MySecondObject'>org.sh.easyweb.MySecondObject (5)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondObject.Methods">
+<h3 id='org.sh.easyweb.MySecondObject'>org.sh.easyweb.MySecondObject (6)</h3><table border="1" style="width:100%" id="org.sh.easyweb.MySecondObject.Methods">
       <tr>
         <th>Displayed Name</th>
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MySecondObject.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Restricted">Restricted</a></td><td>myMethod_Restricted</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.TextBox">TextBox</a></td><td>myMethod_TextBox</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Restricted">Restricted</a></td><td>myMethod_Restricted</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.TextBox">TextBox</a></td><td>myMethod_TextBox</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr>
     </table>
 <br>
+
+<form id="org.sh.easyweb.MySecondObject.Arrays" class="elegant-aero">
+
+ <h1><small>org.sh.easyweb.MySecondObject.myMethod_Arrays</small></h1>
+
+   <label>
+    <span>a [Array[Int]]:</span>
+    <input id="org.sh.easyweb.MySecondObject.Arrays_a" type="text" name="a" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>b [Array[String]]:</span>
+    <input id="org.sh.easyweb.MySecondObject.Arrays_b" type="text" name="b" value="[]"/><br>
+   </label>
+
+
+   <label>
+    <span>c [Array[Boolean]]:</span>
+    <input id="org.sh.easyweb.MySecondObject.Arrays_c" type="text" name="c" value="[]"/><br>
+   </label>
+
+   <label>
+     <span></span>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","Arrays","org.sh.easyweb.MySecondObject.Arrays",["a","b","c"],"org.sh.easyweb.MySecondObject_Arrays_Ans")'>
+   </label>
+ 
+   <div id="org.sh.easyweb.MySecondObject_Arrays_Ans" class="alphaNum"></div>
+</form>
+<a href="#top">top</a> <a href="#org.sh.easyweb.MySecondObject">parent</a>
+
 
 <form id="org.sh.easyweb.MySecondObject.FileUpload" class="elegant-aero">
 

@@ -54,6 +54,11 @@ class MyFirstClass {
     val $value$ = "29" // should set default value to "29"
     value.toString
   }
+  def myMethod_Arrays(a:Array[Int], b:Array[String], c:Array[Boolean]) = {
+    val s = a.sum + b.map(_.length).sum
+    val r = c.foldLeft(true)((x, y) => x && y)
+    if (r) s else -s
+  }
   def otherMethod(choice:Boolean) = {
     // should not appear
     "Ok"

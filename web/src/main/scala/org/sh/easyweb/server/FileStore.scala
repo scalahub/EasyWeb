@@ -21,7 +21,7 @@ import org.sh.reflect.DefaultTypeHandler
   val maxSizeBytes = read("maxSizeBytes", 10000000) // 10 MB
   val maxRetainTime = read("maxRetainTimeHours", 24L) * OneHour
   val isNioMode = read("isNioMode", true)
-  val isPlayMode = read("isPlayMode", true)
+  val isPlayMode = read("isPlayMode", false)
   
   createDir(uploadDir)
   def putFile(file:File):String = {
