@@ -5,6 +5,7 @@ import java.nio.file.Files
 
 import javax.servlet.http.HttpServlet
 import org.sh.reflect.{DefaultTypeHandler, EasyProxy}
+import org.sh.webserver.EmbeddedWebServer
 
 object MyConfig {
   val myFirstClass = new MyFirstClass
@@ -27,6 +28,20 @@ object MyHTMLGen extends App {
   h.c :+= mySecondClass // how to add later
   h.autoGenerateToFile(
     fileNamePrefix, dir, prefix
+  )
+}
+
+object MyWebServer extends App {
+  MyHTMLGen // generate html
+  MyProxy // start proxy
+  new EmbeddedWebServer(8080, None,
+    Array("demo/src/main/webapp/MyHtmlAutoGen.html"),
+    Seq(
+      ("/web", classOf[org.sh.easyweb.server.WebQueryResponder]),
+      ("/init", classOf[org.sh.easyweb.MyServlet]),
+      ("/putfile", classOf[org.sh.easyweb.server.FileUploaderNIO]),
+      ("/getfile", classOf[org.sh.easyweb.server.FileDownloaderNIO])
+    )
   )
 }
 

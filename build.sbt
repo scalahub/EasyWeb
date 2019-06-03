@@ -31,5 +31,6 @@ lazy val root = (project in file(".")).dependsOn(
 lazy val demo = (project in file("demo")).dependsOn(
   root
 ).enablePlugins(JettyPlugin).settings(
-  mainClass in (Compile, run) := Some("org.sh.easyweb.MyHTMLGen")
+  mainClass in (Compile, run) := Some("org.sh.easyweb.MyWebServer"),
+  mainClass in (Test, run) := Some("org.sh.easyweb.MyHTMLGen")
 )

@@ -1,7 +1,11 @@
 
 package org.sh.webserver
 
+import java.io.File
+import java.nio.file.Files
+
 import javax.servlet.http.HttpServlet
+import org.eclipse.jetty.server.handler.{HandlerList, ResourceHandler}
 
 object EmbeddedWebServerTypes {
   type Route = String // route should be something like "/xquery"
@@ -17,10 +21,11 @@ import EmbeddedWebServerTypes._
 class EmbeddedWebServer(
   httpPort:HttpPort, 
   httpsOptions:Option[HttpsOptions],
+  welcomeFiles:Array[String],
   routesServlets:Seq[(Route, ServletClass)] //routesServlets:Seq[(String, Class[_ <: HttpServlet])]  
 ) {  
-  def this(httpPort:Int, routesServlets:(Route, ServletClass)*) = this(httpPort, None, routesServlets.toSeq)
-  def this(routesServlets:(Route, ServletClass)*) = this(8082, None, routesServlets.toSeq)
+  def this(httpPort:Int, routesServlets:(Route, ServletClass)*) = this(httpPort, None, Array[String](), routesServlets.toSeq)
+  def this(routesServlets:(Route, ServletClass)*) = this(8082, None, Array[String](), routesServlets.toSeq)
   
   import org.apache.http.HttpVersion
   import org.eclipse.jetty.server.HttpConfiguration
@@ -37,11 +42,22 @@ class EmbeddedWebServer(
      */
   val server = new Server(httpPort);
   val handler = new ServletHandler;
-  server.setHandler(handler);
+
+  // from https://www.eclipse.org/jetty/documentation/current/embedded-examples.html
+  val resource_handler = new ResourceHandler
+  resource_handler.setDirectoriesListed(true);
+  resource_handler.setWelcomeFiles(welcomeFiles);
+  resource_handler.setResourceBase(".");
+  val handlers = new HandlerList()
+  handlers.setHandlers(Array(resource_handler, handler))
+  //
+
   routesServlets.foreach{
     case (route, myServletClass) => handler.addServletWithMapping(myServletClass, route);
   }
-  
+
+  server.setHandler(handlers)
+
   val http_config = new HttpConfiguration();
 
   http_config.setOutputBufferSize(32768);
@@ -85,6 +101,7 @@ class EmbeddedWebServer(
   }
   server.start;
   server.dumpStdErr;
+
   org.sh.utils.common.Util.doOnceNow{server.join}
   
 }
