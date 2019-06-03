@@ -5,6 +5,7 @@ import org.sh.utils.common.file.TraitFilePropertyReader
 import org.sh.utils.common.Util._
 import org.sh.utils.common.curl.CurlAlt._
 import org.sh.reflect.QueryMaker
+import org.sh.utils.common.encoding.{Base64, Hex}
 
 class WebQueryMaker extends QueryMaker with TraitFilePropertyReader {
   // not for browser but via direct java http request. 
@@ -31,10 +32,11 @@ class WebQueryMaker extends QueryMaker with TraitFilePropertyReader {
   val servletUrl = "http://localHost:8080/web"
   def getUrl(reqID:String, pid:String, reqName:String, reqData:String) = {
     val url = servletUrl+"?reqId="+reqID+"&pid="+pid+"&reqName="+reqName+"&reqData="+encodeBytes(reqData.getBytes)
-    println("url:"+url)
     url
   }
-  def makeQuery (pid:String, queryName:String, queryData:String) =  
-    new String(decode(curl(getUrl(getReqID, pid, queryName, queryData)).split(":")(1)))
+  def makeQuery (pid:String, queryName:String, queryData:String) = {
+    val bytes = decode(curl(getUrl(getReqID, pid, queryName, queryData)).split(":")(1))
+    new String(bytes)
+  }
   def isConnected = true 
 }

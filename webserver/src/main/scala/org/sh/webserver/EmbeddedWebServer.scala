@@ -45,7 +45,7 @@ class EmbeddedWebServer(
 
   // from https://www.eclipse.org/jetty/documentation/current/embedded-examples.html
   val resource_handler = new ResourceHandler
-  resource_handler.setDirectoriesListed(true);
+  resource_handler.setDirectoriesListed(false);
   resource_handler.setWelcomeFiles(welcomeFiles);
   resource_handler.setResourceBase(".");
   val handlers = new HandlerList()
