@@ -140,8 +140,8 @@ object WebQueryResponder extends QueryResponder {
   def compress(s:String) = compressT[Char](s, a => a.mkString)
   def uncompress(s:String) = uncompressT(s, a => a).mkString
   
-//  def compressBytes(a:Array[Byte]) = compressT[Byte](a, b => b.map(_.toChar).mkString)
-//  def uncompressBytes(s:String) = uncompressT[Byte](s, _.map(_.toByte))
+  //  def compressBytes(a:Array[Byte]) = compressT[Byte](a, b => b.map(_.toChar).mkString)
+  //  def uncompressBytes (s:String) = uncompressT[Byte](s, _.map(_.toByte))
 
   def compressT[T](u:Seq[T], seqTToString:Seq[T] => String) = {
     val baos = new ByteArrayOutputStream
@@ -157,10 +157,10 @@ object WebQueryResponder extends QueryResponder {
     }
   }  
 
-  // following for API key response
-  //  removed because added a dedicated ProxyQueryResponder. We don't need WebQueryResponder just for responding to API queries
-//  def getReqRespNoCatch(pid:String, reqName:String, reqDataJson:String, useJavaSerialization:Boolean = false) = getResp(pid, reqName, reqDataJson, useJavaSerialization)
-  
+  // Following for API response
+  //   def getReqRespNoCatch(pid:String, reqName:String, reqDataJson:String, useJavaSerialization:Boolean = false) = getResp(pid, reqName, reqDataJson, useJavaSerialization)
+  // Removed because added a dedicated ProxyQueryResponder. We don't need WebQueryResponder just for responding to API queries
+
 }
 
 //object CompressionTest extends App {

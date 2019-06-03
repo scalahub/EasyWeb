@@ -1,5 +1,6 @@
 package org.sh.easyweb.client
 
+import org.sh.easyweb.server.WebQueryResponder
 import org.sh.utils.common.encoding.Base64._
 import org.sh.utils.common.file.TraitFilePropertyReader
 import org.sh.utils.common.Util._
@@ -7,7 +8,7 @@ import org.sh.utils.common.curl.CurlAlt._
 import org.sh.reflect.QueryMaker
 import org.sh.utils.common.encoding.{Base64, Hex}
 
-class WebQueryMaker extends QueryMaker with TraitFilePropertyReader {
+class WebQueryMaker(val servletUrl:String = "http://localHost:8080/web") extends QueryMaker with TraitFilePropertyReader {
   // not for browser but via direct java http request. 
   val propertyFile = "client.properties"
   val queryTimeOut = read("queryTimeOut", 1000)
@@ -29,14 +30,24 @@ class WebQueryMaker extends QueryMaker with TraitFilePropertyReader {
     reqID += 1
     reqID.toString
   }
-  val servletUrl = "http://localHost:8080/web"
   def getUrl(reqID:String, pid:String, reqName:String, reqData:String) = {
     val url = servletUrl+"?reqId="+reqID+"&pid="+pid+"&reqName="+reqName+"&reqData="+encodeBytes(reqData.getBytes)
     url
   }
   def makeQuery (pid:String, queryName:String, queryData:String) = {
-    val bytes = decode(curl(getUrl(getReqID, pid, queryName, queryData)).split(":")(1))
-    new String(bytes)
+    val reqID = getReqID
+    val url = getUrl(getReqID, pid, queryName, queryData)
+    val curled = curl(url, Array[(String, String)](), post,
+      Array[(String, String)](
+        ("reqId", reqID),
+        ("pid", pid),
+        ("reqName", queryName),
+        ("reqData", encodeBytes(queryData.getBytes))
+      )
+    )
+    val compressedStr = curled.split(":")(1)
+    val str = WebQueryResponder.uncompress(compressedStr)
+    str
   }
   def isConnected = true 
 }
