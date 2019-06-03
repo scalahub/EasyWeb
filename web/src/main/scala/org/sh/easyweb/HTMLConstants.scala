@@ -74,9 +74,35 @@ s"""
     } else ""   
     
     x.paraType.getClassName match {
+      case "byte[]" =>
+        s"""    <input id="""".stripMargin+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
+        s"""" value="0x"/><br>
+           |<label><span></span>Enter bytes as 0x0a1b2c (hex encoded)</label><br>
+         """.stripMargin
+      case "byte[][]" =>
+        s"""    <input id="""".stripMargin+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
+        s"""" value="[]"/><br>
+           |<label><span></span>Enter array of bytes as [0x01a1,0xffef] (hex encoded)</label><br>
+         """.stripMargin
+      case "java.lang.String[]" =>
+        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
+        s"""" value="[]"/><br>
+           |<label><span></span>Enter strings as [hello,world] (don't use quotes)</label><br>
+         """.stripMargin
+      case "int[]" =>
+        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
+        s"""" value="[]"/><br>
+           |<label><span></span>Enter integers as [1,2,3]</label><br>
+         """.stripMargin
+      case "boolean[]" =>
+        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
+        s"""" value="[]"/><br>
+           |<label><span></span>Enter booleans as [true,false,true]</label><br>
+         """.stripMargin
       case any if any.endsWith("]") => // array .. see http://stackoverflow.com/q/3442090/243233
-        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="[]"/><br>"""        
-        
+        println("[REFLECT:WARNING] Using default rules for unknown array type: "+any)
+        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="[]"/><br>"""
+
       case "long" if x.info.map(_ == "date").getOrElse(false) || x.paraName == "from" || x.paraName == "to" || x.paraName == "time" =>
         val paraName = x.paraName
         val inputID = formID+"_"+paraName

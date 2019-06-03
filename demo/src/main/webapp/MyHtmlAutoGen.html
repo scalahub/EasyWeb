@@ -11,7 +11,7 @@ Class that generated this code: org.sh.easyweb.HTMLClientCodeGenerator
 
 Stacktrace of the call is given below:
 
-org.sh.reflect.CodeGenUtil$:CodeGenUtil.scala:80
+org.sh.reflect.CodeGenUtil$:CodeGenUtil.scala:69
 org.sh.easyweb.HTMLConstants$:HTMLConstants.scala:15
 org.sh.easyweb.HTMLClientCodeGenerator:HTMLClientCodeGenerator.scala:118
 org.sh.easyweb.HTMLClientCodeGenerator:HTMLClientCodeGenerator.scala:81
@@ -505,7 +505,7 @@ function changeBGIfLocalhost() {
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[], d:byte[], e:byte[][])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MyFirstClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr>
     </table>
 <br>
 
@@ -516,23 +516,45 @@ function changeBGIfLocalhost() {
    <label>
     <span>a [Array[Int]]:</span>
     <input id="org.sh.easyweb.MyFirstClass.Arrays_a" type="text" name="a" value="[]"/><br>
+<label><span></span>Enter integers as [1,2,3]</label><br>
+         
    </label>
 
 
    <label>
     <span>b [Array[String]]:</span>
     <input id="org.sh.easyweb.MyFirstClass.Arrays_b" type="text" name="b" value="[]"/><br>
+<label><span></span>Enter strings as [hello,world] (don't use quotes)</label><br>
+         
    </label>
 
 
    <label>
     <span>c [Array[Boolean]]:</span>
     <input id="org.sh.easyweb.MyFirstClass.Arrays_c" type="text" name="c" value="[]"/><br>
+<label><span></span>Enter booleans as [true,false,true]</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>d [byte[]]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.Arrays_d" type="text" name="d" value="0x"/><br>
+<label><span></span>Enter bytes as 0x0a1b2c (hex encoded)</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>e [byte[][]]:</span>
+    <input id="org.sh.easyweb.MyFirstClass.Arrays_e" type="text" name="e" value="[]"/><br>
+<label><span></span>Enter array of bytes as [0x01a1,0xffef] (hex encoded)</label><br>
+         
    </label>
 
    <label>
      <span></span>
-     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("JP0FxJmaLGv1DWB3","Arrays","org.sh.easyweb.MyFirstClass.Arrays",["a","b","c"],"org.sh.easyweb.MyFirstClass_Arrays_Ans")'>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("JP0FxJmaLGv1DWB3","Arrays","org.sh.easyweb.MyFirstClass.Arrays",["a","b","c","d","e"],"org.sh.easyweb.MyFirstClass_Arrays_Ans")'>
    </label>
  
    <div id="org.sh.easyweb.MyFirstClass_Arrays_Ans" class="alphaNum"></div>
@@ -638,7 +660,7 @@ function changeBGIfLocalhost() {
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MySecondClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondClass.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[], d:byte[], e:byte[][])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondClass.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr>
     </table>
 <br>
 
@@ -649,23 +671,45 @@ function changeBGIfLocalhost() {
    <label>
     <span>a [Array[Int]]:</span>
     <input id="org.sh.easyweb.MySecondClass.Arrays_a" type="text" name="a" value="[]"/><br>
+<label><span></span>Enter integers as [1,2,3]</label><br>
+         
    </label>
 
 
    <label>
     <span>b [Array[String]]:</span>
     <input id="org.sh.easyweb.MySecondClass.Arrays_b" type="text" name="b" value="[]"/><br>
+<label><span></span>Enter strings as [hello,world] (don't use quotes)</label><br>
+         
    </label>
 
 
    <label>
     <span>c [Array[Boolean]]:</span>
     <input id="org.sh.easyweb.MySecondClass.Arrays_c" type="text" name="c" value="[]"/><br>
+<label><span></span>Enter booleans as [true,false,true]</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>d [byte[]]:</span>
+    <input id="org.sh.easyweb.MySecondClass.Arrays_d" type="text" name="d" value="0x"/><br>
+<label><span></span>Enter bytes as 0x0a1b2c (hex encoded)</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>e [byte[][]]:</span>
+    <input id="org.sh.easyweb.MySecondClass.Arrays_e" type="text" name="e" value="[]"/><br>
+<label><span></span>Enter array of bytes as [0x01a1,0xffef] (hex encoded)</label><br>
+         
    </label>
 
    <label>
      <span></span>
-     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","Arrays","org.sh.easyweb.MySecondClass.Arrays",["a","b","c"],"org.sh.easyweb.MySecondClass_Arrays_Ans")'>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("2fV3xCLNnxbtJQ","Arrays","org.sh.easyweb.MySecondClass.Arrays",["a","b","c","d","e"],"org.sh.easyweb.MySecondClass_Arrays_Ans")'>
    </label>
  
    <div id="org.sh.easyweb.MySecondClass_Arrays_Ans" class="alphaNum"></div>
@@ -756,7 +800,7 @@ function changeBGIfLocalhost() {
         <th>Original Name</th>
         <th>Parameters</th>
         <th>Return Type</th>
-      </tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Restricted">Restricted</a></td><td>myMethod_Restricted</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.TextBox">TextBox</a></td><td>myMethod_TextBox</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr>
+      </tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Arrays">Arrays</a></td><td>myMethod_Arrays</td><td>(a:int[], b:String[], c:boolean[], d:byte[], e:byte[][])</td><td>int</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.FileUpload">FileUpload</a></td><td>myMethod_FileUpload</td><td>(file:java.io.File)</td><td>long</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.InfoVars">InfoVars</a></td><td>myMethod_InfoVars</td><td>(choice:boolean, value:int)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.MyType">MyType</a></td><td>myMethod_MyType</td><td>(myType:org.sh.easyweb.MyType)</td><td>org.sh.easyweb.MyType</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.Restricted">Restricted</a></td><td>myMethod_Restricted</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr><tr><td><a href="#org.sh.easyweb.MySecondObject.TextBox">TextBox</a></td><td>myMethod_TextBox</td><td>(text:org.sh.easyweb.Text)</td><td>String</td></tr>
     </table>
 <br>
 
@@ -767,23 +811,45 @@ function changeBGIfLocalhost() {
    <label>
     <span>a [Array[Int]]:</span>
     <input id="org.sh.easyweb.MySecondObject.Arrays_a" type="text" name="a" value="[]"/><br>
+<label><span></span>Enter integers as [1,2,3]</label><br>
+         
    </label>
 
 
    <label>
     <span>b [Array[String]]:</span>
     <input id="org.sh.easyweb.MySecondObject.Arrays_b" type="text" name="b" value="[]"/><br>
+<label><span></span>Enter strings as [hello,world] (don't use quotes)</label><br>
+         
    </label>
 
 
    <label>
     <span>c [Array[Boolean]]:</span>
     <input id="org.sh.easyweb.MySecondObject.Arrays_c" type="text" name="c" value="[]"/><br>
+<label><span></span>Enter booleans as [true,false,true]</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>d [byte[]]:</span>
+    <input id="org.sh.easyweb.MySecondObject.Arrays_d" type="text" name="d" value="0x"/><br>
+<label><span></span>Enter bytes as 0x0a1b2c (hex encoded)</label><br>
+         
+   </label>
+
+
+   <label>
+    <span>e [byte[][]]:</span>
+    <input id="org.sh.easyweb.MySecondObject.Arrays_e" type="text" name="e" value="[]"/><br>
+<label><span></span>Enter array of bytes as [0x01a1,0xffef] (hex encoded)</label><br>
+         
    </label>
 
    <label>
      <span></span>
-     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","Arrays","org.sh.easyweb.MySecondObject.Arrays",["a","b","c"],"org.sh.easyweb.MySecondObject_Arrays_Ans")'>
+     <input value="submit" type="button" onclick='JavaScript:xmlhttpPostSend("wkMP3v3LGWKfgpR","Arrays","org.sh.easyweb.MySecondObject.Arrays",["a","b","c","d","e"],"org.sh.easyweb.MySecondObject_Arrays_Ans")'>
    </label>
  
    <div id="org.sh.easyweb.MySecondObject_Arrays_Ans" class="alphaNum"></div>
