@@ -15,10 +15,17 @@ lazy val web = (project in file("web")).dependsOn(
   EasyMirror % "compile->compile;test->test"
 )
 
+lazy val ScalaUtils = RootProject(uri("https://github.com/scalahub/ScalaUtils.git"))
+//lazy val ScalaUtils = RootProject(uri("../ScalaUtils"))
+
+// below project contains the EmbeddedWebServer
+lazy val webserver = (project in file("webserver")).dependsOn(ScalaUtils)
+
 lazy val db_inject = (project in file("db_inject")).dependsOn(web, BetterDB)
 
 lazy val root = (project in file(".")).dependsOn(
-  db_inject
+  db_inject,
+  webserver
 )
 
 lazy val demo = (project in file("demo")).dependsOn(
