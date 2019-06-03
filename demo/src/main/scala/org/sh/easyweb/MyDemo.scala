@@ -14,7 +14,7 @@ object MyConfig {
     MySecondObject,
     myFirstClass
   )  // objects to be generated in html
-  val prefix = "myMethod_" // only methods starting with "myMethod" will be considered
+  val prefix = "myMethod_" // only methods starting with "myMethod_" will be considered
   val fileNamePrefix = "MyHtml" // html file will have "MyHtml" prepended
   val dir = "demo/src/main/webapp" // directory where HTML will be generated
 
