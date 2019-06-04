@@ -35,5 +35,5 @@ lazy val demo = (project in file("demo")).dependsOn(
   // Alternative main class, commented out. To run, use runMain
   // mainClass in (Compile, run) := Some("org.sh.easyweb.MyHTMLGen")
   mainClass in (Compile, run) := Some("org.sh.easyweb.MyWebServer"),
-  mainClass in (Test, run) := Some("org.sh.easyweb.WebProxyQueryMaker")
+  mainClass in (Test, run) := Some("org.sh.easyweb.WebDoubleProxyQueryMaker")
 )
