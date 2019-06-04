@@ -43,6 +43,23 @@ object MyWebServer extends App {
       ("/getfile", classOf[org.sh.easyweb.server.FileDownloaderNIO])
     )
   )
+
+  //////////////////////////////////////////////////////
+  // from https://stackoverflow.com/a/18509384/243233
+  import java.awt.Desktop
+  import java.io.IOException
+  import java.net.URI
+  import java.net.URISyntaxException
+
+  val url = "http://localhost:8080"
+  if (Desktop.isDesktopSupported) {
+    val desktop = Desktop.getDesktop
+    desktop.browse(new URI(url))
+  } else {
+    val runtime = Runtime.getRuntime
+    runtime.exec("xdg-open " + url)
+  }
+  //////////////////////////////////////////////////////
 }
 
 class MyServlet extends HttpServlet {
