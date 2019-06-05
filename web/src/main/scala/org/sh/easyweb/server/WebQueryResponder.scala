@@ -148,11 +148,11 @@ object WebQueryResponder extends QueryResponder {
     using(new OutputStreamWriter(new GZIPOutputStream(baos))){osw =>
       osw.write(seqTToString(u))
     }
-    
-    new sun.misc.BASE64Encoder().encode(baos.toByteArray)    
+
+    java.util.Base64.getEncoder.encodeToString(baos.toByteArray)
   }
   def uncompressT[T](compressed:String, stringToSeqT:String => Seq[T]) = {
-    using(new GZIPInputStream(new ByteArrayInputStream(new sun.misc.BASE64Decoder().decodeBuffer(compressed)))){is =>
+    using(new GZIPInputStream(new ByteArrayInputStream(java.util.Base64.getDecoder.decode(compressed)))){is =>
       stringToSeqT(scala.io.Source.fromInputStream(is).mkString)
     }
   }  
