@@ -32,7 +32,7 @@ object MyHTMLGen extends App {
 }
 
 object MyWebServer extends App {
-  MyHTMLGen // generate html
+  MyHTMLGen.main(Array[String]()) // generate html
   MyProxy // start proxy
   new EmbeddedWebServer(8080, None,
     Array("demo/src/main/webapp/MyHtmlAutoGen.html"),
@@ -74,7 +74,7 @@ object MyProxy {
   import MyConfig._
   listObj.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List(mySecondClass).foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
-  List("*Restricted").foreach(EasyProxy.preventMethod)
+  List("*Restricted*").foreach(EasyProxy.preventMethod)
   DefaultTypeHandler.addType[MyType](classOf[MyType], string => new MyType(string), myType => myType.toString)
 }
 
@@ -124,7 +124,7 @@ object MySecondObject extends MySecondClass {
     s"Text of ${text.getText.size} chars"
   }
   def myMethod_Restricted(text:Text) = {
-    val $INFO$ = "Accepts text box"
+    val $INFO$ = "This method is restricted. Try calling it."
     s"Text of ${text.getText.size} chars"
   }
 }
