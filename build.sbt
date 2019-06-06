@@ -38,6 +38,9 @@ lazy val demo = (project in file("demo")).dependsOn(
   mainClass in (Test, run) := Some("org.sh.easyweb.WebDoubleProxyQueryMaker")
 )
 
+/*
+// Testing code, commented out...
+
 initialize := {
     /** Java specification version compatibility rule. */
     object CompatibleJavaVersion extends VersionNumberCompatibility {
@@ -51,4 +54,4 @@ initialize := {
     val curr = VersionNumber(sys.props("java.specification.version"))
     assert(CompatibleJavaVersion(curr, required), s"Java $required or above required. Currently $curr")
 }
-
+*/
