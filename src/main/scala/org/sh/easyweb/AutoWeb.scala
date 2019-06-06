@@ -11,9 +11,8 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
   //val fileNamePrefix = Util.randomAlphanumericString(50)
   val fileNamePrefix = ""
   val prefix = ""
+  FUtil.createDir(htmldir)
 
-  val dataDir = "dataDir"
-  FUtil.createDir(dataDir)
   val h = new HTMLClientCodeGenerator(
     anyRefs,
     "/web",
@@ -23,7 +22,7 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     false
   )
   h.autoGenerateToFile(
-    fileNamePrefix, dataDir, prefix
+    fileNamePrefix, htmldir, prefix
   )(ignoreMethodStr.map{
     case (x, y) => (y, x) // need to fix this. Why do we need to reverse?
   })
@@ -31,7 +30,7 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
   anyRefs.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List("*Restricted*").foreach(EasyProxy.preventMethod)
   new EmbeddedWebServer(8080, None,
-    Array(s"$dataDir/${fileNamePrefix}AutoGen.html"),
+    Array(s"$htmldir/${fileNamePrefix}AutoGen.html"),
     Seq(
       ("/web", classOf[org.sh.easyweb.server.WebQueryResponder]),
       ("/putfile", classOf[org.sh.easyweb.server.FileUploaderNIO]),
