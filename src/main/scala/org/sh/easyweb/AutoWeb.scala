@@ -5,7 +5,7 @@ import org.sh.utils.common.Util
 import org.sh.webserver.EmbeddedWebServer
 import org.sh.utils.common.file.{TraitFilePropertyReader, Util => FUtil}
 
-class AutoWeb(anyRefs:List[AnyRef], appInfo:String) extends TraitFilePropertyReader{
+class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) extends TraitFilePropertyReader{
   override val propertyFile: String = "autoweb.properties"
   val htmldir = read("htmldir", "autoweb")
   //val fileNamePrefix = Util.randomAlphanumericString(50)
@@ -24,7 +24,9 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String) extends TraitFilePropertyRea
   )
   h.autoGenerateToFile(
     fileNamePrefix, dataDir, prefix
-  )
+  )(ignoreMethodStr.map{
+    case (x, y) => (y, x) // need to fix this. Why do we need to reverse?
+  })
 
   anyRefs.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List("*Restricted*").foreach(EasyProxy.preventMethod)
