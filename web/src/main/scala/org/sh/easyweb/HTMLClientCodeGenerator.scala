@@ -6,7 +6,6 @@ import org.sh.reflect.CodeGenUtil._
 import org.sh.reflect.FormProcessor
 import org.sh.reflect.DataStructures._
 import org.sh.reflect.DefaultTypeHandler
-import HTMLConstants._
 import org.sh.easyweb.server.FileStore
 import org.sh.easyweb.server.FileStoreNIO
 import org.sh.utils.common.file.{Util => FUtil}
@@ -20,15 +19,15 @@ import org.sh.utils.common.file.{Util => FUtil}
     allowOnlyKnownTypes: If processing encounters any unknown parameter or return types, it should throw and error
     hideUnknownTypes: If processing encounters any unknown types, it should hide them
  */
-class HTMLClientCodeGenerator(initRefs: List[AnyRef], postUrl:String, appInfo:String, optIsl:Option[List[InputStream]], allowOnlyKnownTypes:Boolean, hideUnknownTypes:Boolean) {
+class HTMLClientCodeGenerator(initRefs: List[AnyRef], appInfo:String, optIsl:Option[List[InputStream]], allowOnlyKnownTypes:Boolean, hideUnknownTypes:Boolean) {
   FileStore // just access file-store to ensure type handlers for java.io.File are added
   FileStoreNIO // just access file-store to ensure type handlers for java.io.File are added
   var c:List[AnyRef] = initRefs
   var pageTitle = "Auto Generated"
-  def this(c: List[AnyRef], postUrl:String, appInfo:String, ois:Option[List[InputStream]])  = this(c, postUrl, appInfo, ois, true, false)
-  def this(c: List[AnyRef], postUrl:String, appInfo:String, is:List[InputStream])  = this(c, postUrl, appInfo, Some(is))
-  def this(c: List[AnyRef], postUrl:String, appInfo:String)  = this(c, postUrl, appInfo, None)
-  def this(c: List[AnyRef], postUrl:String)  = this(c, postUrl, "", None)
+  def this(c: List[AnyRef], appInfo:String, ois:Option[List[InputStream]])  = this(c, appInfo, ois, true, false)
+  def this(c: List[AnyRef], appInfo:String, is:List[InputStream])  = this(c, appInfo, Some(is))
+  def this(c: List[AnyRef], appInfo:String)  = this(c, appInfo, None)
+  def this(c: List[AnyRef])  = this(c, "", None)
   // uses defaultPID as html file name // used for webTest
   def autoGenerateToDefaultFile(dir:String, prefix:String=defaultPrefix):String = {
     def xorC(c1:Char, c2:Char) = {
@@ -115,7 +114,7 @@ class HTMLClientCodeGenerator(initRefs: List[AnyRef], postUrl:String, appInfo:St
     }
   }
   def generate(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)]):String = { // last param is class name
-    getPage(mainMethods, appInfo, postUrl, this, pageTitle)
+    HTMLConstants.getPage(mainMethods, appInfo, this, pageTitle)
   }
 }
 

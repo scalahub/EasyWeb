@@ -1,3 +1,6 @@
+<!--
+Only needed for external web-server (not used by the embedded one)
+-->
 <web-app>
     <servlet>
         <servlet-name>WebQueryResponder</servlet-name>
@@ -20,15 +23,15 @@
     <!-- mapping -->
     <servlet-mapping> 
 		<servlet-name>WebQueryResponder</servlet-name>
-		<url-pattern>/web</url-pattern>
+		<url-pattern>/post</url-pattern>
     </servlet-mapping>
     <servlet-mapping> 
 		<servlet-name>FileUploader</servlet-name>
-		<url-pattern>/putfile</url-pattern>
+		<url-pattern>/upload</url-pattern>
     </servlet-mapping>
     <servlet-mapping> 
 		<servlet-name>FileDownloader</servlet-name>
-		<url-pattern>/getfile</url-pattern>
+		<url-pattern>/download</url-pattern>
     </servlet-mapping>
     <servlet-mapping> 
 		<servlet-name>MyServlet</servlet-name>

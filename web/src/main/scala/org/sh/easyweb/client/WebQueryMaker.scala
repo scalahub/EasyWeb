@@ -1,5 +1,6 @@
 package org.sh.easyweb.client
 
+import org.sh.easyweb.HTMLConstants
 import org.sh.easyweb.server.WebQueryResponder
 import org.sh.utils.common.encoding.Base64._
 import org.sh.utils.common.file.TraitFilePropertyReader
@@ -8,7 +9,7 @@ import org.sh.utils.common.curl.CurlAlt._
 import org.sh.reflect.QueryMaker
 import org.sh.utils.common.encoding.{Base64, Hex}
 
-class WebQueryMaker(val servletUrl:String = "http://localHost:8080/web") extends QueryMaker with TraitFilePropertyReader {
+class WebQueryMaker(val servletUrl:String = s"http://localHost:8080/${HTMLConstants.postUrl}") extends QueryMaker with TraitFilePropertyReader {
   // not for browser but via direct java http request. 
   val propertyFile = "client.properties"
   val queryTimeOut = read("queryTimeOut", 1000)

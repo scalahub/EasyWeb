@@ -2,6 +2,7 @@
 
 package org.sh.easyweb.server
 
+import org.sh.easyweb.HTMLConstants
 import org.sh.utils.common.file.Util._
 import org.sh.utils.common.Util._
 import org.sh.utils.common.json.JSONUtil
@@ -20,7 +21,7 @@ import com.google.common.jimfs.Jimfs;import org.sh.easyweb.HTML
 
 
 object FileStoreNIO {
-  
+
   val fs = Jimfs.newFileSystem(Configuration.forCurrentPlatform);
 
   val maxSizeBytes = 10000000 // 10 MB  
@@ -72,7 +73,7 @@ object FileStoreNIO {
   
   def getPathLink(path:Path):String = {
     val fileID = putPath(path)
-    s"""<a target='_blank' href='/getfile$actualLink$fileID'>$fileID</a>"""    
+    s"""<a target='_blank' href='/${HTMLConstants.fileDownloadUrl}${actualLink}${fileID}'>$fileID</a>"""
   }
   def getHTMLLink(html:HTML):String = {
     val (path, fileID) = putNewPathAndGetID(None)

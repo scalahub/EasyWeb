@@ -5,17 +5,23 @@ import org.sh.utils.common.Util
 import org.sh.webserver.EmbeddedWebServer
 import org.sh.utils.common.file.{TraitFilePropertyReader, Util => FUtil}
 
+/**
+  *
+  * @param anyRefs A list of objects or class instances for which HTML is to be generated
+  * @param appInfo Some string (can contain HTML) describhing the application
+  * @param ignoreMethodStr A list of methods to be ignored, given as list of pairs of type: ("class_path", "methodName").
+  *                        For instance, to ignore methods called "bar" and "baz" in an "Foo" within package "org.my.app",
+  *                        use List(("org.my.app.Foo", "bar"), ("org.my.app.Foo", "baz")). By default, this is an empty list.
+  */
 class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) extends TraitFilePropertyReader{
   override val propertyFile: String = "autoweb.properties"
   val htmldir = read("htmldir", "autoweb")
-  //val fileNamePrefix = Util.randomAlphanumericString(50)
   val fileNamePrefix = ""
   val prefix = ""
   FUtil.createDir(htmldir)
 
   val h = new HTMLClientCodeGenerator(
     anyRefs,
-    "/web",
     appInfo,
     None,
     false,
@@ -32,9 +38,9 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
   new EmbeddedWebServer(8080, None,
     Array(s"$htmldir/${fileNamePrefix}AutoGen.html"),
     Seq(
-      ("/web", classOf[org.sh.easyweb.server.WebQueryResponder]),
-      ("/putfile", classOf[org.sh.easyweb.server.FileUploaderNIO]),
-      ("/getfile", classOf[org.sh.easyweb.server.FileDownloaderNIO])
+      ("/"+HTMLConstants.postUrl, classOf[org.sh.easyweb.server.WebQueryResponder]),
+      ("/"+HTMLConstants.fileUploadUrl, classOf[org.sh.easyweb.server.FileUploaderNIO]),
+      ("/"+HTMLConstants.fileDownloadUrl, classOf[org.sh.easyweb.server.FileDownloaderNIO])
     )
   )
 

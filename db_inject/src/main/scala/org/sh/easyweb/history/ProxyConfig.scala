@@ -27,7 +27,10 @@ trait WebProxyConfig extends TraitPlaintextFileProperties {
   def toDo = read("toDo", "").split(';')
   
   val formObjects:Set[Object]
-  lazy val cg = new HTMLClientCodeGenerator(formObjects.toList.sortWith{(l, r) => l.getClass.getCanonicalName < r.getClass.getCanonicalName}, formUrl, formInfo, None, false, false)
+  lazy val cg = new HTMLClientCodeGenerator(
+    formObjects.toList.sortWith{(l, r) => l.getClass.getCanonicalName < r.getClass.getCanonicalName},
+    formInfo, None, false, false
+  )
 
   val formClasses:List[AnyRef]
   

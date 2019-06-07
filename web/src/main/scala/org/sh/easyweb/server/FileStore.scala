@@ -9,6 +9,8 @@ import org.sh.utils.common.json.JSONUtil
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
+
+import org.sh.easyweb.HTMLConstants
 import org.sh.reflect.DefaultTypeHandler
 
 // NOTE: This is only for storing temp files. DO NOT USE FOR App specific files.
@@ -56,8 +58,7 @@ import org.sh.reflect.DefaultTypeHandler
   
   def getFileLink(file:File) = {
     val fileID = putFile(file)
-    //    <a target="_blank" href={"/getfile?fileID="+fileID}>{fileID}</a>.toString
-    val html = s"""<a target='_blank' href='/getfile$actualLink$fileID'>$fileID</a>"""
+    val html = s"""<a target='_blank' href='/${HTMLConstants.fileDownloadUrl}$actualLink$fileID'>$fileID</a>"""
     html
   }
   def getFileLinks(files:Array[File]) = JSONUtil.encodeJSONArray(files.map(getFileLink)).toString
