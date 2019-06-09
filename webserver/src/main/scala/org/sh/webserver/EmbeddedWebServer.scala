@@ -102,6 +102,6 @@ class EmbeddedWebServer(
   server.start;
   server.dumpStdErr;
 
-  org.sh.utils.common.Util.doOnceNow{server.join}
+  org.sh.utils.Util.doOnceNow{server.join}
   
 }

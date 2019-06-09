@@ -1,9 +1,9 @@
 package org.sh.easyweb
 
 import org.sh.reflect.{DefaultTypeHandler, EasyProxy}
-import org.sh.utils.common.Util
+import org.sh.utils.Util
 import org.sh.webserver.EmbeddedWebServer
-import org.sh.utils.common.file.{TraitFilePropertyReader, Util => FUtil}
+import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
 
 /**
   *

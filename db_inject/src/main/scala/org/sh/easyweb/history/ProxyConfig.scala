@@ -1,8 +1,8 @@
 
 package org.sh.easyweb.history
 
-import org.sh.utils.common.file.PlaintextFileProperties
-import org.sh.utils.common.file.TraitPlaintextFileProperties
+import org.sh.utils.file.PlaintextFileProperties
+import org.sh.utils.file.TraitPlaintextFileProperties
 import org.sh.easyweb.HTMLClientCodeGenerator
 import org.sh.reflect.DefaultTypeHandler
 import org.sh.reflect.EasyProxy

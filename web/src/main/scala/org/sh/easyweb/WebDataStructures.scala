@@ -1,8 +1,8 @@
 
 package org.sh.easyweb
 
-import org.sh.utils.common.encoding.Base64
-import org.sh.utils.common.json.JSONUtil._
+import org.sh.utils.encoding.Base64
+import org.sh.utils.json.JSONUtil._
 
 class Text(s:String) {
   val getText = new String(Base64.decode(s))

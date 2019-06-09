@@ -9,7 +9,7 @@ object WebDoubleProxyQueryMaker extends App {
     8080,
     None,
     Array[String](),
-    Seq((HTMLConstants.postUrl, classOf[org.sh.easyweb.server.WebQueryResponder]))
+    Seq(("/"+HTMLConstants.postUrl, classOf[org.sh.easyweb.server.WebQueryResponder]))
   )
   val pqm = new DoubleProxyQueryMaker(new WebQueryMaker)
   val testVectors = Seq(

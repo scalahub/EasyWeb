@@ -3,10 +3,10 @@ package org.sh.easyweb.history.db
 import org.sh.db.config.DBConfigFromFile
 import org.sh.db.core.DataStructures._
 import org.sh.db.{DBManager => DBMgr}
-import org.sh.utils.common.Util._
-import org.sh.utils.common.file.TraitFilePropertyReader
-import org.sh.utils.common.json.JSONUtil
-import org.sh.utils.common.json.JSONUtil.JsonFormatted
+import org.sh.utils.Util._
+import org.sh.utils.file.TraitFilePropertyReader
+import org.sh.utils.json.JSONUtil
+import org.sh.utils.json.JSONUtil.JsonFormatted
 import org.sh.easyweb.WebDataStructures._
 import org.sh.db.BetterDB._
 import org.sh.easyweb.history.WebAccessHistory

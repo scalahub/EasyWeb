@@ -2,10 +2,10 @@
 
 package org.sh.easyweb.server
 
-import org.sh.utils.common.file.TraitFilePropertyReader
-import org.sh.utils.common.file.Util._
-import org.sh.utils.common.Util._
-import org.sh.utils.common.json.JSONUtil
+import org.sh.utils.file.TraitFilePropertyReader
+import org.sh.utils.file.Util._
+import org.sh.utils.Util._
+import org.sh.utils.json.JSONUtil
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
@@ -42,10 +42,10 @@ import org.sh.reflect.DefaultTypeHandler
     if (actualFile.isFile) actualFile else throw new Exception("invalid fileID (not a file)") 
   }
   def putNewFileAndGetID(implicit fileName:Option[String] = None) = {
-    val fileID = org.sh.utils.common.Util.randomAlphanumericString(20)
+    val fileID = org.sh.utils.Util.randomAlphanumericString(20)
     val saveDir = new File(uploadDir, shaSmall(fileID))    
     if (!saveDir.mkdir) throw new Exception("could not create upload dir")    
-    val name = if (fileName.isDefined) fileName.get else org.sh.utils.common.Util.randomAlphanumericString(20)
+    val name = if (fileName.isDefined) fileName.get else org.sh.utils.Util.randomAlphanumericString(20)
     val file = new File(saveDir.getAbsolutePath, name)
     (file, fileID)
   }  
@@ -69,7 +69,7 @@ import org.sh.reflect.DefaultTypeHandler
   doEvery30Mins{
     tryIt{
       val retainAfter = getTime - maxRetainTime
-      val files = org.sh.utils.common.file.Util.getAllFiles(uploadDir, null, true).map(new File(_)).filter{f =>
+      val files = org.sh.utils.file.Util.getAllFiles(uploadDir, null, true).map(new File(_)).filter{f =>
         f.lastModified < retainAfter && f.isFile
       } // extension null returns all files
       files.foreach{f =>

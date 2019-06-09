@@ -8,7 +8,7 @@ import org.sh.reflect.DataStructures._
 import org.sh.reflect.DefaultTypeHandler
 import org.sh.easyweb.server.FileStore
 import org.sh.easyweb.server.FileStoreNIO
-import org.sh.utils.common.file.{Util => FUtil}
+import org.sh.utils.file.{Util => FUtil}
 
 /*
   Parameters
@@ -46,7 +46,7 @@ class HTMLClientCodeGenerator(initRefs: List[AnyRef], appInfo:String, optIsl:Opt
     val file = dir+"/"+fullFileName
     println(s"[reflect] prefix = $prefix")
     println("Writing HTML file: "+file)
-    org.sh.utils.common.file.Util.writeToTextFile(file, generateFilteredOut(prefix, ignoreMethods))
+    org.sh.utils.file.Util.writeToTextFile(file, generateFilteredOut(prefix, ignoreMethods))
     fullFileName
   } 
   

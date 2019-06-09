@@ -3,9 +3,9 @@ package org.sh.easyweb.client
 import org.sh.easyweb.HTMLConstants
 import org.sh.easyweb.server.WebQueryResponder
 import org.sh.reflect.QueryMaker
-import org.sh.utils.common.curl.CurlAlt._
-import org.sh.utils.common.encoding.Base64._
-import org.sh.utils.common.file.TraitFilePropertyReader
+import org.sh.utils.curl.Curl._
+import org.sh.utils.encoding.Base64._
+import org.sh.utils.file.TraitFilePropertyReader
 
 class WebQueryMaker(val servletUrl:String = s"http://localHost:8080/${HTMLConstants.postUrl}") extends QueryMaker with TraitFilePropertyReader {
   // not for browser but via direct java http request. 

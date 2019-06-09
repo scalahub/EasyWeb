@@ -16,9 +16,9 @@ import org.sh.reflect.QueryResponder
 import org.sh.easyweb.WebDataStructures._
 import org.sh.easyweb.HTML
 import org.sh.easyweb.Text
-import org.sh.utils.common.encoding.Base64._
-import org.sh.utils.common.json.JSONUtil._
-import org.sh.utils.common.Util._
+import org.sh.utils.encoding.Base64._
+import org.sh.utils.json.JSONUtil._
+import org.sh.utils.Util._
 
 class WebQueryResponder extends HttpServlet {
   import WebQueryResponder._
