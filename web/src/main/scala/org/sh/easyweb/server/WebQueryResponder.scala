@@ -46,15 +46,32 @@ object WebQueryResponder extends QueryResponder {
   
   if (FileStore.isNioMode) {
     DefaultTypeHandler.addType[File](classOf[File], FileStoreNIO.getFile, FileStoreNIO.getFileLink)
-    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]], files => throw new Exception("not implemented"), FileStoreNIO.getFileLinks)  
+    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]],
+      files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"),
+      FileStoreNIO.getFileLinks
+    )
 
     DefaultTypeHandler.addType[Path](classOf[Path], FileStoreNIO.getPath, FileStoreNIO.getPathLink )
-    DefaultTypeHandler.addType[Array[Path]](classOf[Array[Path]], files => throw new Exception("not implemented"), FileStoreNIO.getPathLinks)
-    DefaultTypeHandler.addType[HTML](classOf[HTML], str => throw new Exception("not supported") /* new HTML(_) */, FileStoreNIO.getHTMLLink)  
+    DefaultTypeHandler.addType[Array[Path]](classOf[Array[Path]],
+      files => throw new Exception(s"No handler defined for converting 'String => Array[Path]'"),
+      FileStoreNIO.getPathLinks
+    )
+
+    DefaultTypeHandler.addType[HTML](classOf[HTML],
+      str => throw new Exception("No handler defined for converting 'String => HTML'") /* new HTML(_) */,
+      FileStoreNIO.getHTMLLink
+    )
   } else {
     DefaultTypeHandler.addType[File](classOf[File], FileStore.getFile, FileStore.getFileLink)
-    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]], files => throw new Exception("not implemented"), FileStore.getFileLinks)  
-    DefaultTypeHandler.addType[Path](classOf[Path], x => FileStore.getFile(x).toPath, files => throw new Exception("not implemented"))
+    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]],
+      files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"),
+      FileStore.getFileLinks
+    )
+
+    DefaultTypeHandler.addType[Path](classOf[Path],
+      x => FileStore.getFile(x).toPath,
+      files => throw new Exception(s"No handler defined for converting 'Path => String'")
+    )
     println(" File store using non-NIO")
   }
   // following will give problems because of type erasure. Seq[<something>] may be treated as Seq[File]

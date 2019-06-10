@@ -11,6 +11,7 @@ object HTMLConstants {
   val postUrl:String = "post"
   val fileUploadUrl:String = "upload"
   val fileDownloadUrl = "download"
+  val optionTypePrefix = "erjnceijwkxmw2x2oijskqzkoqmzkq"
 
   def getPage(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)], appInfo:String, callee:AnyRef, pageTitle:String)  = {
     val info = getInfo(mainMethods, appInfo)
@@ -218,9 +219,15 @@ s"""
 
   }
   def topTag = "<a href=\"#top\">top</a>"
-  def jsArray(sm:ScalaMethod) = "["+
-      (if (sm.params.size == 0) "" else sm.params.map("\""+_.paraName+"\"").reduceLeft(_+","+_))+"]"
-    
+  def jsArray(sm:ScalaMethod) =
+    "["+
+      (if (sm.params.size == 0) "" else sm.params.map(getParaName).reduceLeft(_+","+_))+
+    "]"
+  def getParaName(p:Param) = {
+    // Modified for handling Option type. Due to type erasure, we only get "Option", and not "Option[String]", etc
+    val nameToUse = if (p.paraType.toString == "Lscala/Option;") p.paraName+optionTypePrefix else p.paraName
+    "\""+nameToUse+"\""
+  }
   def js(postUrl:String) = {
     JSConstants.js
   }

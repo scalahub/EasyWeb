@@ -19,6 +19,13 @@ class MyFirstClass {
     val r = c.foldLeft(true)((x, y) => x && y)
     if (r) s else -s
   }
+  def myMethod_Option(a:Option[String], b:Option[String]) = {
+    Array(
+      "Parameter a is: "+a,
+      "Parameter b is: "+b
+    )
+  }
+
   def otherMethod(choice:Boolean, arrFiles:Array[File]) = {
     // should not appear
     "Ok"
