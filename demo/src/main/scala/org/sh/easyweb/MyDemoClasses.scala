@@ -17,7 +17,8 @@ class MyFirstClass {
   def myMethod_Arrays(a:Array[Int], b:Array[String], c:Array[Boolean], d:Array[Byte], e:Array[Array[Byte]]) = {
     val s = a.sum + b.map(_.length).sum
     val r = c.foldLeft(true)((x, y) => x && y)
-    if (r) s else -s
+    val t = if (r) s else -s
+    Array(t, 1, 2, 3)
   }
   def myMethod_Option(a:Option[String], b:Option[String]) = {
     Array(

@@ -11,7 +11,15 @@ object HTMLConstants {
   val postUrl:String = "post"
   val fileUploadUrl:String = "upload"
   val fileDownloadUrl = "download"
-  val optionTypePrefix = "erjnceijwkxmw2x2oijskqzkoqmzkq"
+
+  // Following is suffixed to Option[String] input types.
+  //   For example, if the method has parameter optString:Option[String], then in the HTML, the internally used lable for
+  //   that parameter will be optString_erjnceijwkxmw2x2oijskqzkoqmzkq
+  // This is to enable handling of Option input types differently; while other parameters cannot correspond to empty
+  //   HTML form input, this one can. In the JavaScript code, this value will be used to determine if we need to do
+  //   this "empty check".
+
+  val optionTypePrefix = "_erjnceijwkxmw2x2oijskqzkoqmzkq"
 
   def getPage(mainMethods:List[(List[(ScalaMethod, AnyRef)], String)], appInfo:String, callee:AnyRef, pageTitle:String)  = {
     val info = getInfo(mainMethods, appInfo)

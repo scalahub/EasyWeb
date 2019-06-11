@@ -91,7 +91,7 @@ object JSConstants {
     th = th.format(tr.format(thCon));
     for (i = 0; i < parsedJson.length; i++)
     {
-      tbCon += tdRow.format(parsedJson[i], i+1);
+      tbCon += tdRow.format(JSON.stringify(parsedJson[i]), i+1);
       trCon += tr.format(tbCon);
       tbCon = '';
     }

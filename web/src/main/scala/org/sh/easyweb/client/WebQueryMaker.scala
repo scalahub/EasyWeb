@@ -36,14 +36,14 @@ class WebQueryMaker(val servletUrl:String = s"http://localHost:8080/${HTMLConsta
   def makeQuery (pid:String, queryName:String, queryData:String) = {
     val reqID = getReqID
     val url = getUrl(getReqID, pid, queryName, queryData)
-    val curled = curl(url, Array[(String, String)](), post,
-      Array[(String, String)](
+    val curled = curl(url, Nil, post,
+      Seq[(String, String)](
         ("reqId", reqID),
         ("pid", pid),
         ("reqName", queryName),
         ("reqData", encodeBytes(queryData.getBytes))
       )
-    )
+    )(None)
     val compressedStr = curled.split(":")(1)
     val str = WebQueryResponder.uncompress(compressedStr)
     str
