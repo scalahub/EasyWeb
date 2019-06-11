@@ -127,14 +127,10 @@ object WebQueryResponder extends QueryResponder {
           //    // println("This will cause NoClassDefFoundError in further calls to this class")
           //    "Error: "+e.getCause.getMessage
           case e:Throwable => 
-            //if (debug) e.printStackTrace
             "Error: "+e.getMessage
         }
-        // if (debug) println("Response is: "+resp)
-        // println("ResponseID is: "+reqID)
         val resp = Resp(reqID, pid, reqName, output)
-        // onReqResp.foreach{case (id, on) => tryIt(on(req.get, resp, reqSrc))}
-        onReqResp.foreach{case (id, on) => on(rq, resp, reqSrc)} // removed tryIt. Let invoker handler error
+        onReqResp.foreach{case (id, on) => on(rq, resp, reqSrc)}
         Some(resp)
       case _ => None
     }

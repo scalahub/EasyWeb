@@ -2,12 +2,45 @@ package org.sh.easyweb
 
 import java.io.File
 
+import org.sh.utils.json.JSONUtil.JsonFormatted
+
 class MyType(val string:String) {
   override def toString = s"MyType($string)"
 }
 
+case class Foo(s:String, a:Int, b:BigInt) {
+  override def toString = s"($s -> $a -> $b)"
+}
+
+case class Bar(a:String, b:Int, c:BigInt, d:Array[String], e:Array[Int]) extends JsonFormatted {
+  val keys = Array("a", "b", "c", "d", "e")
+  val vals = Array(a, b, c, d, e)
+}
+
 class MyFirstClass {
-  // following tests the HTML generated
+
+  def myMethod_Foos(i:Int) = {
+    (0 to i).toArray.map{j =>
+      val s = j.toString
+      Foo(s, j, j)
+    }
+  }
+
+  def myMethod_Bars(i:Int) = {
+    (0 to i).toArray.map{j =>
+      val s = j.toString
+      Bar(s, j, j, Array(s, s, s), Array(1, 2, 3, 4))
+    }
+  }
+
+  def myMethod_Foo = {
+    Foo("s", 10, 10)
+  }
+
+  def myMethod_Bar = {
+    Bar("s", 10, 10, Array("s", "s", "s"), Array(1, 2, 3, 4))
+  }
+
   def myMethod_InfoVars(choice:Boolean, value:Int) = {
     val $INFO$ = "Info about someMethod. Check that choice is 'false' and value is '29'"
     val $choice$ = "false" // should set default choice radio button to "no"

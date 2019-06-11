@@ -91,7 +91,12 @@ object JSConstants {
     th = th.format(tr.format(thCon));
     for (i = 0; i < parsedJson.length; i++)
     {
-      tbCon += tdRow.format(JSON.stringify(parsedJson[i]), i+1);
+      var obj = parsedJson[i];
+      var typeOfObj = typeof obj;
+      var actual = obj;
+      if (typeOfObj == "object") actual = JSON.stringify(obj);
+      tbCon += tdRow.format(actual, i+1);
+      // tbCon += tdRow.format(JSON.stringify(parsedJson[i]), i+1);
       trCon += tr.format(tbCon);
       tbCon = '';
     }
@@ -99,7 +104,13 @@ object JSConstants {
 
   else
   {
-    thCon += thRow.format(JSON.stringify(parsedJson));
+    var obj = parsedJson;
+    var typeOfObj = typeof obj;
+    var actual = obj;
+    if (typeOfObj == "object") actual = JSON.stringify(obj);
+
+    thCon += thRow.format(actual);
+    // thCon += thRow.format(JSON.stringify(parsedJson));
     // thCon += thRow.format(parsedJson);
     th = th.format(tr.format(thCon));
   }
