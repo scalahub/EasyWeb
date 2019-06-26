@@ -98,3 +98,45 @@ object MySecondObject extends MySecondClass {
   }
 }
 
+object MiscErrors {
+  def func0_good(a:Text) = {
+    val $a$ = "This\nappears"
+    // value $a$ appears in HTML
+    "Ok".toString
+  }
+  def func0_bad(a:Text) = {
+    val $a$ = "This\ndoes not\nappear"
+    // above value $a$ does not appear in HTML
+    "Ok" // compare with func0_good
+  }
+  def func1_good(a:Text) = {
+    val $a$ = "This\nappears"
+    1.toString
+  }
+  def func1_bad(a:Text) = {
+    val $a$ = "This\ndoes not\nappear"
+    1 // compare with func1_good
+  }
+  def func2_good(a:Text) = {
+    val $a$ =
+      """This
+appears
+      """
+  }
+  def func2_bad(a:Text) = {
+    val $a$ =
+      """This does not
+appear
+      """
+
+    "Ok"  // compare with func2_good
+  }
+
+  def func3_bad(a:Text) = {
+    val $a$ =
+      """This
+        |appears as
+        |"none"
+      """.stripMargin
+  }
+}

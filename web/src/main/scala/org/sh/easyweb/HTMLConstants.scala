@@ -86,33 +86,39 @@ s"""
     
     x.paraType.getClassName match {
       case "byte[]" =>
+        val value = x.info.getOrElse("0x")
         s"""    <input id="""".stripMargin+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
-        s"""" value="0x"/><br>
+        s"""" value="$value"/><br>
            |<label><span></span>Enter bytes as 0x0a1b2c (hex encoded)</label><br>
          """.stripMargin
       case "byte[][]" =>
+        val value = x.info.getOrElse("[]")
         s"""    <input id="""".stripMargin+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
-        s"""" value="[]"/><br>
+        s"""" value="$value"/><br>
            |<label><span></span>Enter array of bytes as [0x01a1,0xffef] (hex encoded)</label><br>
          """.stripMargin
       case "java.lang.String[]" =>
+        val value = x.info.getOrElse("[]")
         s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
-        s"""" value="[]"/><br>
+        s"""" value="$value"/><br>
            |<label><span></span>Enter strings as [hello,world] (don't use quotes)</label><br>
          """.stripMargin
       case "int[]" =>
+        val value = x.info.getOrElse("[]")
         s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
-        s"""" value="[]"/><br>
+        s"""" value="$value"/><br>
            |<label><span></span>Enter integers as [1,2,3]</label><br>
          """.stripMargin
       case "boolean[]" =>
+        val value = x.info.getOrElse("[]")
         s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+
-        s"""" value="[]"/><br>
+        s"""" value="$value"/><br>
            |<label><span></span>Enter booleans as [true,false,true]</label><br>
          """.stripMargin
       case any if any.endsWith("]") => // array .. see http://stackoverflow.com/q/3442090/243233
         println("[REFLECT:WARNING] Using default rules for unknown array type: "+any)
-        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="[]"/><br>"""
+        val value = x.info.getOrElse("[]")
+        s"""    <input id=""""+formID+"_"+x.paraName+"""" type="text" name=""""+x.paraName+s"""" value="$value"/><br>"""
 
       case "long" if x.info.map(_ == "date").getOrElse(false) || x.paraName == "from" || x.paraName == "to" || x.paraName == "time" =>
         val paraName = x.paraName
@@ -166,6 +172,7 @@ s"""
 
       case "org.sh.easyweb.Text" =>
         val default = if (x.paraName != "INFO") x.info.getOrElse("").replace("\\n", "\n").replace("\\\\", "\\") else ""
+
         """    <textarea id=""""+formID+"_"+x.paraName+"""" name=""""+x.paraName+s"""">$default</textarea><br>"""
       case other =>
         val value = if (x.paraName != "INFO") x.info.getOrElse("") else ""
