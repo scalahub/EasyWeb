@@ -8,7 +8,7 @@ import org.sh.utils.file.TraitFilePropertyReader
 import org.sh.utils.json.JSONUtil
 import org.sh.utils.json.JSONUtil.JsonFormatted
 import org.sh.easyweb.WebDataStructures._
-import org.sh.db.BetterDB._
+import org.sh.db.ScalaDB._
 import org.sh.easyweb.history.WebAccessHistory
 import org.sh.easyweb.server.WebQueryResponder
 

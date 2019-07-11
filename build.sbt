@@ -7,11 +7,11 @@ scalaVersion := "2.12.8"
 
 lazy val ScalaUtils = RootProject(uri("https://github.com/scalahub/ScalaUtils.git"))
 lazy val EasyMirror = RootProject(uri("https://github.com/scalahub/EasyMirror.git"))
-lazy val BetterDB = RootProject(uri("https://github.com/scalahub/BetterDB.git"))
+lazy val ScalaDB = RootProject(uri("https://github.com/scalahub/ScalaDB.git"))
 
 //lazy val ScalaUtils = RootProject(uri("../ScalaUtils"))
 //lazy val EasyMirror = RootProject(uri("../EasyMirror"))
-//lazy val BetterDB = RootProject(uri("../BetterDB"))
+//lazy val ScalaDB = RootProject(uri("../ScalaDB"))
 
 lazy val web = (project in file("web")).dependsOn(
   EasyMirror % "compile->compile;test->test"
@@ -20,7 +20,7 @@ lazy val web = (project in file("web")).dependsOn(
 // below project contains the EmbeddedWebServer
 lazy val webserver = (project in file("webserver")).dependsOn(ScalaUtils)
 
-lazy val db_inject = (project in file("db_inject")).dependsOn(web, BetterDB)
+lazy val db_inject = (project in file("db_inject")).dependsOn(web, ScalaDB)
 
 lazy val root = (project in file(".")).dependsOn(
   db_inject,
