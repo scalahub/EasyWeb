@@ -50,11 +50,11 @@ object FileUploaderNIO {
             // val sizeInBytes = fi.getSize();
             val (path, fileID) = FileStoreNIO.putNewPathAndGetID(if (fileName == null) None else Some(fileName))           
             
-            // import sun.misc.IOUtils;
+            import sun.misc.IOUtils;
             
-            // Files.write(path, IOUtils.readFully(fi.getInputStream, -1, false))
-            Files.write(path, fi.getInputStream.readAllBytes)
-            // fi.write(file.toFile) ;
+            Files.write(path, IOUtils.readFully(fi.getInputStream, -1, false))
+            //Files.write(path, fi.getInputStream.readAllBytes)
+            //fi.write(file.toFile) ;
             fileID
           }
         } else "not a file field"

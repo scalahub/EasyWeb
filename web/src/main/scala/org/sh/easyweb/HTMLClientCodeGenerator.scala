@@ -20,8 +20,8 @@ import org.sh.utils.file.{Util => FUtil}
     hideUnknownTypes: If processing encounters any unknown types, it should hide them
  */
 class HTMLClientCodeGenerator(initRefs: List[AnyRef], appInfo:String, optIsl:Option[List[InputStream]], allowOnlyKnownTypes:Boolean, hideUnknownTypes:Boolean) {
-  FileStore // just access file-store to ensure type handlers for java.io.File are added
-  FileStoreNIO // just access file-store to ensure type handlers for java.io.File are added
+  //FileStore // just access file-store to ensure type handlers for java.io.File are added
+  //FileStoreNIO // just access file-store to ensure type handlers for java.io.File are added
   var c:List[AnyRef] = initRefs
   var pageTitle = "Auto Generated"
   def this(c: List[AnyRef], appInfo:String, ois:Option[List[InputStream]])  = this(c, appInfo, ois, true, false)
