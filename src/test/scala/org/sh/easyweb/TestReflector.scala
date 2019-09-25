@@ -18,15 +18,56 @@ object TestReflector extends App {
   val b = m.infoVars.get("$b$").getOrElse("noInfo")
 
   assert(INFO == $INFO$, s"expected ${$INFO$}. Found $INFO")
-  println("INFO VAR passed")
   assert(a == $a$, s"Expected ${$a$} found $a")
   assert(b == $b$, s"Expected ${$b$} found $b")
-  println("PARA VARS passed")
+
+  val method2 = fp.getPublicMethods(2)
+  val expected2 = "def bar(boxName:String, value:long, ergoScript:org.sh.easyweb.Text, useP2S:boolean, registerKeys:String[], tokenIDs:byte[][], tokenAmts:long[]): void"
+  val found2 = method2.toScalaString
+
+  val method2InfoVars = method2.infoVars
+
+  val expectedMap = Map(
+    ("$useP2S$","false"),
+    ("$tokenIDs$","[]"),
+    ("$registerKeys$","[b,c]"),
+    ("$value$","10000"),
+    ("$boxName$","box1"),
+    ("$ergoScript$","{\\n  val x = blake2b256(c)\\n  b == 1234.toBigInt &&\\n  c == x\\n}"),
+    ("$tokenAmts$","[]"),
+    ("$INFO$","If use P2S is false then it will use P2SH address")
+  )
+
+  method2InfoVars.foreach{
+    case (key, value) =>
+      val expected = expectedMap.get(key).getOrElse("None")
+      assert(expected == value, s"Expected: $expected. Actual: $value")
+  }
+
+  assert(method2InfoVars.size == expectedMap.size, s"InfoVars size (${method2InfoVars.size}) != Expected size (${expectedMap.size})")
+  println("INFOVARS passed")
+  /*
+Expected: def bar(boxName:String, value:long, ergoScript:org.sh.easyweb.Text, useP2S:boolean, registerKeys:String[], tokenIDs:byte[][], tokenAmts:long[]): void.
+Found:    def bar(boxName:String, value:long, :org.sh.easyweb.Text, ergoScript:boolean, useP2S:String[], registerKeys:byte[][], tokenIDs:long[]): void
+   */
+  assert(found2 == expected2, s"Expected: $expected2. Found: $found2")
+  println("SIGNATURE passed")
 
 }
 
 object TestObj {
   def method(a:Int, b:String) = {
+    /*
+($useP2S$,false)
+($tokenIDs$,[])
+($registerKeys$,[b,c])
+($value$,10000)
+($boxName$,box1)
+($ergoScript$,{\n  val x = blake2b256(c)\n  b == 1234.toBigInt &&\n  c == x\n})
+($tokenAmts$,[])
+($INFO$,If use P2S is false then it will use P2SH address)
+
+     */
     val $INFO$ = "method_info"
     val $a$ = """Some
 Large Text
@@ -37,5 +78,21 @@ lines
     val $b$ = "hello"
   }
   def foo(a:Int) = {}
+
+  def bar(boxName:String, value:Long, ergoScript:Text, useP2S:Boolean, registerKeys:Array[String], tokenIDs:Array[Array[Byte]], tokenAmts:Array[Long]) = {
+    val $INFO$ = "If use P2S is false then it will use P2SH address"
+    val $boxName$ = "box1"
+    val $useP2S$ = "false"
+    val $value$ = "10000"
+    val $ergoScript$ = """{
+  val x = blake2b256(c)
+  b == 1234.toBigInt &&
+  c == x
+}"""
+    val $registerKeys$ = "[b,c]"
+    val $tokenIDs$ = "[]"
+    val $tokenAmts$ = "[]"
+  }
+
 }
-//*/
+
