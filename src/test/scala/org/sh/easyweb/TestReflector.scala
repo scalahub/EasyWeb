@@ -46,28 +46,13 @@ object TestReflector extends App {
 
   assert(method2InfoVars.size == expectedMap.size, s"InfoVars size (${method2InfoVars.size}) != Expected size (${expectedMap.size})")
   println("INFOVARS passed")
-  /*
-Expected: def bar(boxName:String, value:long, ergoScript:org.sh.easyweb.Text, useP2S:boolean, registerKeys:String[], tokenIDs:byte[][], tokenAmts:long[]): void.
-Found:    def bar(boxName:String, value:long, :org.sh.easyweb.Text, ergoScript:boolean, useP2S:String[], registerKeys:byte[][], tokenIDs:long[]): void
-   */
-  assert(found2 == expected2, s"Expected: $expected2. Found: $found2")
+  assert(found2 == expected2, s"\nExpected:\n   $expected2\nFound:\n   $found2")
   println("SIGNATURE passed")
 
 }
 
 object TestObj {
   def method(a:Int, b:String) = {
-    /*
-($useP2S$,false)
-($tokenIDs$,[])
-($registerKeys$,[b,c])
-($value$,10000)
-($boxName$,box1)
-($ergoScript$,{\n  val x = blake2b256(c)\n  b == 1234.toBigInt &&\n  c == x\n})
-($tokenAmts$,[])
-($INFO$,If use P2S is false then it will use P2SH address)
-
-     */
     val $INFO$ = "method_info"
     val $a$ = """Some
 Large Text
@@ -95,4 +80,3 @@ lines
   }
 
 }
-
