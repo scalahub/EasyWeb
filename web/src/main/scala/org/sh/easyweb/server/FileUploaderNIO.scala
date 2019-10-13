@@ -3,7 +3,8 @@ package org.sh.easyweb.server
 
 //import java.io.File
 //import java.io.FileInputStream
-import java.nio.file.Files
+import java.nio.file.{Files, StandardCopyOption}
+
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.{HttpServletRequest => HReq}
 import javax.servlet.http.{HttpServletResponse => HResp}
@@ -46,15 +47,10 @@ object FileUploaderNIO {
           if (fileName == "") {
             "No fileName for field: "+fieldName+" supplied"              
           } else {
-            // val isInMemory = fi.isInMemory();
-            // val sizeInBytes = fi.getSize();
-            val (path, fileID) = FileStoreNIO.putNewPathAndGetID(if (fileName == null) None else Some(fileName))           
-            
-            import sun.misc.IOUtils;
-            
-            Files.write(path, IOUtils.readFully(fi.getInputStream, -1, false))
-            //Files.write(path, fi.getInputStream.readAllBytes)
-            //fi.write(file.toFile) ;
+            val (path, fileID) = FileStoreNIO.putNewPathAndGetID(if (fileName == null) None else Some(fileName))
+            java.nio.file.Files.copy(fi.getInputStream, path, StandardCopyOption.REPLACE_EXISTING);
+            // below does not work in Java > 8
+            //Files.write(path, sun.misc.IOUtils.readFully(fi.getInputStream, -1, false))
             fileID
           }
         } else "not a file field"
