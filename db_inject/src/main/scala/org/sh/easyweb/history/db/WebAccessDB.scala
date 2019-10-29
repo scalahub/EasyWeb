@@ -29,7 +29,7 @@ object WebAccessDB extends TraitFilePropertyReader {
   
 
   val accessCols = Array(internalIDCol, externalIDCol, methodNameCol, reqCol, respCol, timeCol, srcCol)
-  val accessDB = DBMgr("webAccessDB")(accessCols: _*)()
+  val accessDB = Tab.withName("webAccessDB").withCols(accessCols).withPriKey()
 
   def toBytes(a:Any) = a.toString.getBytes("UTF-16")
   def fromBytes(a:Array[Byte]) = new String(a, "UTF-16")

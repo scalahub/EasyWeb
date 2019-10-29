@@ -1,13 +1,11 @@
 package org.sh.easyweb
 
-import org.sh.reflect.Util._
 import java.io.InputStream
+
 import org.sh.reflect.CodeGenUtil._
-import org.sh.reflect.FormProcessor
 import org.sh.reflect.DataStructures._
-import org.sh.reflect.DefaultTypeHandler
-import org.sh.easyweb.server.FileStore
-import org.sh.easyweb.server.FileStoreNIO
+import org.sh.reflect.{DefaultTypeHandler, FormProcessor}
+import org.sh.reflect.Util._
 import org.sh.utils.file.{Util => FUtil}
 
 /*
