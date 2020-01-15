@@ -13,6 +13,7 @@ import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributeView
 import java.nio.file.attribute.BasicFileAttributes
 //import org.sh.reflect.DefaultTypeHandler
+import scala.jdk.CollectionConverters._
 
 // NOTE: This is only for storing temp files. DO NOT USE FOR App specific files.
 // The only purpose of the file store is for giving a File upload and download link for java.io.File types in the HTML UI
@@ -48,10 +49,9 @@ object FileStoreNIO {
     (tmp.toFile, path.getFileName)
   }
   
-  import scala.collection.JavaConversions._
   def getPath(pathID:String):Path = {
     val saveDir = fs.getPath(shaSmall(pathID))
-    val files = Files.newDirectoryStream(saveDir).filter(Files.isReadable).toArray
+    val files = Files.newDirectoryStream(saveDir).asScala.filter(Files.isReadable).toArray
     if (files.size == 1) files(0) else files.sortBy(x => Files.getFileAttributeView(x, classOf[BasicFileAttributeView]).readAttributes.creationTime).head
   }
   def putNewPathAndGetID(implicit fileName:Option[String] = None):(Path, String) = {
