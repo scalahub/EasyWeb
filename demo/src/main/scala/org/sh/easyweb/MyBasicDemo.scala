@@ -10,7 +10,8 @@ object MyBasicDemo extends App {
     MySecondObject,
     new MyFirstClass,
     new MySecondClass,
-    MiscErrors
+    MiscErrors,
+    Foo
   )
   List("*Restricted*").foreach(EasyProxy.preventMethod)
   new AutoWeb(objects, "Sample app")
