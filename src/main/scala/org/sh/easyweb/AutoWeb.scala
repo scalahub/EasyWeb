@@ -1,6 +1,6 @@
 package org.sh.easyweb
 
-import org.sh.reflect.{DefaultTypeHandler, EasyProxy}
+import org.sh.reflect.{CodeGenUtil, DefaultTypeHandler, EasyProxy}
 import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
 import org.sh.webserver.EmbeddedWebServer
 
@@ -58,6 +58,9 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     println(s"Writing Scala code to $scalaFile")
     val scalaFileText =
       s"""
+        |/*
+        |${CodeGenUtil.preamble(this)}
+        |*/
         |package easyweb {
         |  import javax.servlet.http.HttpServlet
         |  import javax.servlet.http.{HttpServletRequest => HReq}
@@ -88,6 +91,9 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     val webXmlFile = s"$webXmlDir/web.xml"
     val webXmlFileText =
       s"""
+        |<!--
+        |${CodeGenUtil.preamble(this)}
+        |-->
         |<web-app
         |        xmlns="http://java.sun.com/xml/ns/javaee"
         |        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
