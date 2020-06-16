@@ -15,28 +15,31 @@ import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
   */
 class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) extends TraitFilePropertyReader{
   override val propertyFile: String = "autoweb.properties"
-  val htmldir = read("htmldir", "autoweb")
+  val webDir = read("htmldir", "src/main/webapp") // previously was "autoweb"
   val fileNamePrefix = ""
   val prefix = ""
-  FUtil.createDir(htmldir)
+  FUtil.createDir(webDir)
 
-  val h = new HTMLClientCodeGenerator(
+  val webAppGenerator = new HTMLClientCodeGenerator(
     anyRefs,
     appInfo,
     None,
     false,
     false
   )
-  h.autoGenerateToFile(
-    fileNamePrefix, htmldir, prefix
+
+  webAppGenerator.autoGenerateToFile(
+    fileNamePrefix, webDir, prefix
   )(ignoreMethodStr.map{
     case (x, y) => (y, x) // need to fix this. Why do we need to reverse?
   })
 
+  val htmlFile = s"${fileNamePrefix}AutoGen.html"
+
   anyRefs.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List("*Restricted*").foreach(EasyProxy.preventMethod)
   new EmbeddedWebServer(8080, None,
-    Array(s"$htmldir/${fileNamePrefix}AutoGen.html"),
+    Array(s"$webDir/$htmlFile"),
     Seq(
       ("/"+HTMLConstants.postUrl, classOf[org.sh.easyweb.server.WebQueryResponder]),
       ("/"+HTMLConstants.fileUploadUrl, classOf[org.sh.easyweb.server.FileUploaderNIO]),
@@ -44,8 +47,59 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     )
   )
 
-  /*
+  def generateWebXml = {
+    val webXmlDir = s"$webDir/WEB-INF"
+    val webXmlFile = s"$webXmlDir/web.xml"
+    val webXmlFileText =
+      s"""
+        |<?xml version="1.0" encoding="ISO-8859-1" ?>
+        |
+        |<web-app
+        |        xmlns="http://java.sun.com/xml/ns/javaee"
+        |        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        |        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        |        version="3.0">
+        |
+        |    <display-name>AutoWeb</display-name>
+        |    <description>AutoWeb application</description>
+        |
+        |    <servlet>
+        |        <servlet-name>ProxyServlet</servlet-name>
+        |        <servlet-class>org.sh.easyweb.server.WebQueryResponder</servlet-class>
+        |    </servlet>
+        |    <servlet>
+        |        <servlet-name>UploadServlet</servlet-name>
+        |        <servlet-class>org.sh.easyweb.server.FileUploaderNIO</servlet-class>
+        |    </servlet>
+        |    <servlet>
+        |        <servlet-name>DownloadServlet</servlet-name>
+        |        <servlet-class>org.sh.easyweb.server.FileDownloaderNIO</servlet-class>
+        |    </servlet>
+        |    <servlet-mapping>
+        |        <servlet-name>ProxyServlet</servlet-name>
+        |        <url-pattern>/${HTMLConstants.postUrl}</url-pattern>
+        |    </servlet-mapping>
+        |    <servlet-mapping>
+        |        <servlet-name>UploadServlet</servlet-name>
+        |        <url-pattern>/${HTMLConstants.fileUploadUrl}</url-pattern>
+        |    </servlet-mapping>
+        |    <servlet-mapping>
+        |        <servlet-name>DownloadServlet</servlet-name>
+        |        <url-pattern>/${HTMLConstants.fileDownloadUrl}</url-pattern>
+        |    </servlet-mapping>
+        |
+        |    <welcome-file-list>
+        |        <welcome-file>$htmlFile</welcome-file>
+        |    </welcome-file-list>
+        |</web-app>
+        |""".stripMargin
+
+    org.sh.utils.file.Util.createDir(webXmlDir)
+    org.sh.utils.file.Util.writeToTextFile(webXmlFile, webXmlFileText)
+  }
+
   //////////////////////////////////////////////////////
+  // Open page in browser
   // from https://stackoverflow.com/a/18509384/243233
   import java.awt.Desktop
   import java.net.URI
@@ -59,5 +113,4 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     runtime.exec("xdg-open " + url)
   }
   //////////////////////////////////////////////////////
-  */
 }
