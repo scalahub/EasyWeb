@@ -1,9 +1,8 @@
 package org.sh.easyweb
 
 import org.sh.reflect.{DefaultTypeHandler, EasyProxy}
-import org.sh.utils.Util
-import org.sh.webserver.EmbeddedWebServer
 import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
+import org.sh.webserver.EmbeddedWebServer
 
 /**
   *
@@ -16,6 +15,7 @@ import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
 class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) extends TraitFilePropertyReader{
   override val propertyFile: String = "autoweb.properties"
   val webDir = read("htmldir", "src/main/webapp") // previously was "autoweb"
+  val srcDir = read("srcDir", "src/main/scala")
   val fileNamePrefix = ""
   val prefix = ""
   FUtil.createDir(webDir)
@@ -47,6 +47,42 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     )
   )
 
+  case class BetterString(s:String) {
+    def clean = if (s.endsWith("$")) s.init else s
+  }
+  implicit def stringToBetterString(s:String) = new BetterString(s)
+
+  def generateInitServlet: AutoWeb = {
+    val scalaSrcDir = s"$srcDir/easyweb"
+    val scalaFile = s"$scalaSrcDir/Initializer.scala"
+    println(s"Writing Scala code to $scalaFile")
+    val scalaFileText =
+      s"""
+        |package easyweb {
+        |  import javax.servlet.http.HttpServlet
+        |  import javax.servlet.http.{HttpServletRequest => HReq}
+        |  import javax.servlet.http.{HttpServletResponse => HResp}
+        |  import org.sh.reflect.{DefaultTypeHandler, EasyProxy}
+        |
+        |
+        |  class Initializer extends HttpServlet {
+        |
+        |    val anyRefs = List(
+        |      ${anyRefs.map(_.getClass.getCanonicalName.clean).reduceLeft(_+","+_)}
+        |    )
+        |    anyRefs.foreach(EasyProxy.addProcessor("$prefix", _, DefaultTypeHandler, true))
+        |    def getReq(hReq:HReq) = {}
+        |    override def doGet(hReq:HReq, hResp:HResp) = doPost(hReq, hResp)
+        |    override def doPost(hReq:HReq, hResp:HResp) = {}
+        |  }
+        |}
+        |""".stripMargin
+
+    org.sh.utils.file.Util.createDir(scalaSrcDir)
+    org.sh.utils.file.Util.writeToTextFile(scalaFile, scalaFileText)
+    this
+  }
+
   def generateWebXml = {
     val webXmlDir = s"$webDir/WEB-INF"
     val webXmlFile = s"$webXmlDir/web.xml"
@@ -62,7 +98,12 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
         |    <description>AutoWeb application</description>
         |
         |    <servlet>
-        |        <servlet-name>ProxyServlet</servlet-name>
+        |        <servlet-name>InitializerServlet</servlet-name>
+        |        <servlet-class>easyweb.Initializer</servlet-class>
+        |        <load-on-startup>1</load-on-startup>
+        |    </servlet>
+        |    <servlet>
+        |        <servlet-name>QueryServlet</servlet-name>
         |        <servlet-class>org.sh.easyweb.server.WebQueryResponder</servlet-class>
         |    </servlet>
         |    <servlet>
@@ -74,7 +115,7 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
         |        <servlet-class>org.sh.easyweb.server.FileDownloaderNIO</servlet-class>
         |    </servlet>
         |    <servlet-mapping>
-        |        <servlet-name>ProxyServlet</servlet-name>
+        |        <servlet-name>QueryServlet</servlet-name>
         |        <url-pattern>/${HTMLConstants.postUrl}</url-pattern>
         |    </servlet-mapping>
         |    <servlet-mapping>
@@ -94,6 +135,7 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
 
     org.sh.utils.file.Util.createDir(webXmlDir)
     org.sh.utils.file.Util.writeToTextFile(webXmlFile, webXmlFileText)
+    generateInitServlet
   }
 
   //////////////////////////////////////////////////////
