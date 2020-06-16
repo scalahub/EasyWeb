@@ -44,6 +44,7 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     )
   )
 
+  /*
   //////////////////////////////////////////////////////
   // from https://stackoverflow.com/a/18509384/243233
   import java.awt.Desktop
@@ -58,4 +59,5 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
     runtime.exec("xdg-open " + url)
   }
   //////////////////////////////////////////////////////
+  */
 }
