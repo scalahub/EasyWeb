@@ -1,35 +1,19 @@
 
 package org.sh.easyweb.server
 
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.OutputStreamWriter
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, OutputStreamWriter}
 import java.nio.file.Path
-import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.{HttpServletRequest => HReq}
-import javax.servlet.http.{HttpServletResponse => HResp}
-import org.sh.reflect.DefaultTypeHandler
-import org.sh.reflect.QueryResponder
+import java.util.zip.{GZIPInputStream, GZIPOutputStream}
+
+import javax.servlet.http.{HttpServlet, HttpServletRequest => HReq, HttpServletResponse => HResp}
+import org.sh.easyweb.{HTML, Text}
 import org.sh.easyweb.WebDataStructures._
-import org.sh.easyweb.HTML
-import org.sh.easyweb.Text
-import org.sh.utils.encoding.Base64._
-import org.sh.utils.json.JSONUtil._
+import org.sh.reflect.{DefaultTypeHandler, QueryResponder}
 import org.sh.utils.Util._
+import org.sh.utils.encoding.Base64._
 
 class WebQueryResponder extends HttpServlet {
   import WebQueryResponder._
-  def getReq(hReq:HReq) = {
-    
-    getReqOption(
-      hReq.getParameter("reqId"), 
-      hReq.getParameter("pid"), 
-      hReq.getParameter("reqName"), 
-      hReq.getParameter("reqData"))
-  }
   override def doGet(hReq:HReq, hResp:HResp) = doPost(hReq, hResp)
   override def doPost(hReq:HReq, hResp:HResp) = {
     hResp.setContentType("text/plain")
@@ -37,11 +21,17 @@ class WebQueryResponder extends HttpServlet {
   }
 }
 
-object WebQueryResponder extends QueryResponder {
-  
+object WebQueryResponder {
   //  FileStore
   //  FileStoreNIO
-  
+  def getReq(hReq:HReq) = {
+    getReqOption(
+      hReq.getParameter("reqId"),
+      hReq.getParameter("pid"),
+      hReq.getParameter("reqName"),
+      hReq.getParameter("reqData"))
+  }
+
   DefaultTypeHandler.addType[Text](classOf[Text], new Text(_), _.getText /* text => throw new Exception("not supported") */)
   
   if (FileStore.isNioMode) {
@@ -109,14 +99,13 @@ object WebQueryResponder extends QueryResponder {
     try Some(Req(reqID, pid, reqName, new String(decode(encodedReqData))))    
     catch { case _:Throwable => None }
   def getResp(req:Req):String = getResp(Some(req))
-  def getResp(req:Option[Req])(implicit reqSrc:Option[String]= None):String = encodeResp(getReqResp(req)(reqSrc))
-  def getReqResp(req:Option[Req])(implicit reqSrc:Option[String]= None) = {
-
+  def getResp(req:Option[Req])(implicit reqSrc:Option[String] = None, sessionSecret:Option[String] = None):String = encodeResp(getReqResp(req)(reqSrc, sessionSecret))
+  def getReqResp(req:Option[Req])(implicit reqSrc:Option[String] = None, sessionSecret:Option[String] = None) = {
     req match {
       case Some(rq@Req(reqID, pid, reqName, reqData)) => 
         val output = try {
           onReq.foreach{case (id, on) => on(rq, reqSrc)} // don't use tryIt here because invoker may want to throw exception to deny access
-          getResp(pid, reqName, reqData, false)  // false => don't use java seriailization
+          QueryResponder.getResp(pid, reqName, reqData, false)(sessionSecret)  // false => don't use java serialization
         } catch { 
           // // maybe add following two cases inside Proxy.getResponse ??
           //  case e:InvocationTargetException => 

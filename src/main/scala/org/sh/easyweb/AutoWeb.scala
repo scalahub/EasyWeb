@@ -1,7 +1,7 @@
 package org.sh.easyweb
 
 import org.sh.reflect.{CodeGenUtil, DefaultTypeHandler, EasyProxy}
-import org.sh.utils.file.{TraitFilePropertyReader, Util => FUtil}
+import org.sh.utils.file.{Util => FUtil}
 import org.sh.webserver.EmbeddedWebServer
 
 /**
@@ -12,12 +12,16 @@ import org.sh.webserver.EmbeddedWebServer
   *                        For instance, to ignore methods called "bar" and "baz" in an "Foo" within package "org.my.app",
   *                        use List(("org.my.app.Foo", "bar"), ("org.my.app.Foo", "baz")). By default, this is an empty list.
   */
-class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) extends TraitFilePropertyReader{
-  override val propertyFile: String = "autoweb.properties"
-  val webDir = read("htmldir", "src/main/webapp") // previously was "autoweb"
-  val srcDir = read("srcDir", "src/main/scala")
+object AutoWeb{
+  val webDir = "src/main/webapp" // previously was "autoweb"
+  val srcDir = "src/main/scala"
   val fileNamePrefix = ""
+  val htmlFile = s"${fileNamePrefix}AutoGen.html"
   val prefix = ""
+}
+
+class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) {
+  import AutoWeb._
   FUtil.createDir(webDir)
 
   val webAppGenerator = new HTMLClientCodeGenerator(
@@ -33,8 +37,6 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
   )(ignoreMethodStr.map{
     case (x, y) => (y, x) // need to fix this. Why do we need to reverse?
   })
-
-  val htmlFile = s"${fileNamePrefix}AutoGen.html"
 
   anyRefs.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List("*Restricted*").foreach(EasyProxy.preventMethod)

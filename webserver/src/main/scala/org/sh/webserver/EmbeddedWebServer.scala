@@ -6,6 +6,8 @@ import java.nio.file.Files
 
 import javax.servlet.http.HttpServlet
 import org.eclipse.jetty.server.handler.{HandlerList, ResourceHandler}
+import org.eclipse.jetty.server.session.{DefaultSessionIdManager, SessionHandler}
+import org.eclipse.jetty.servlet.ServletContextHandler
 
 object EmbeddedWebServerTypes {
   type Route = String // route should be something like "/xquery"
@@ -50,7 +52,6 @@ class EmbeddedWebServer(
   resource_handler.setResourceBase(".");
   val handlers = new HandlerList()
   handlers.setHandlers(Array(resource_handler, handler))
-  //
 
   routesServlets.foreach{
     case (route, myServletClass) => handler.addServletWithMapping(myServletClass, route);
@@ -101,7 +102,5 @@ class EmbeddedWebServer(
   }
   server.start;
   server.dumpStdErr;
-
   org.sh.utils.Util.doOnceNow{server.join}
-  
 }
