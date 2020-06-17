@@ -32,7 +32,7 @@ class AutoWebSession(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[
          |    val anyRefs = List(
          |      ${anyRefs.map(_.getClass.getCanonicalName.clean).reduceLeft(_ + "," + _)}
          |    )
-         |    val htmlGen = new HTMLClientCodeGenerator(anyRefs, "${appInfo}", None, false, false)
+         |    val htmlGen = new HTMLClientCodeGenerator(anyRefs, \"\"\"${appInfo}\"\"\", None, false, false)
          |    val html = htmlGen.generateFilteredOut("${prefix}", Nil)
          |    def isLocalHost(req:HReq) = req.getServerName == "localhost"
          |    override def doGet(hReq:HReq, hResp:HResp) = doPost(hReq, hResp)
