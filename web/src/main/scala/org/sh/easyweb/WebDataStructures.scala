@@ -20,8 +20,8 @@ object WebDataStructures {
     val vals:Array[Any] = Array(reqID:String, pid:String, reqName:String, reqData:String)
     val keys = Array("reqID":String, "pid":String, "reqName":String, "reqData":String)
     def getReqDataKeys = try getJSONKeys(reqData) catch {
-      case e:Throwable => 
-        if (org.sh.reflect.Util.debug) e.printStackTrace
+      case e:Throwable =>
+        // if (org.sh.reflect.Util.debug) e.printStackTrace
         Nil
         
     }
