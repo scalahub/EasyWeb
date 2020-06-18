@@ -45,7 +45,7 @@ class AutoWebSession(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[
          |      if (isNewPatternNeeded || isHttpsNeeded) {
          |        hResp.sendRedirect(fullUrl(hReq, secret))
          |      } else {
-         |        hResp.getWriter.print(html.replace("replaceWithActualSecret", secret))
+         |        hResp.getWriter.print(html.replace("${HTMLConstants.secretPlaceholder}", secret))
          |      }
          |    }
          |    def getRedirectUrl(sessionUrl:String) = "/session"+sessionUrl
