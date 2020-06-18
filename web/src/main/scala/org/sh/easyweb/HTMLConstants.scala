@@ -11,7 +11,6 @@ object HTMLConstants {
   val postUrl:String = "post"
   val fileUploadUrl:String = "upload"
   val fileDownloadUrl = "download"
-  val secretPlaceholder = "ewbsokjudhk12qafbqdh" // some random string that will be substituted with session secret in the HTML
 
   // Following is suffixed to Option[String] input types.
   //   For example, if the method has parameter optString:Option[String], then in the HTML, the internally used lable for
@@ -32,7 +31,7 @@ s"""
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <!--<meta content="utf-8" http-equiv="encoding">-->
 <title>$pageTitle</title>
-"""+CSSConstants.style+"\n"+JSConstants.js+"</head>\n<body onload='changeBGIfLocalhost();'>"+info+classBody(mainMethods)+"\n</body>\n</html>"
+"""+CSSConstants.style+"\n"+js(postUrl)+"</head>\n<body onload='changeBGIfLocalhost();'>"+info+classBody(mainMethods)+"\n</body>\n</html>"
   }
   def methodsBody(methods:List[(ScalaMethod, AnyRef)], parent:String) = methods.foldLeft("")((x, y)=> x + "\n"+methodBody(y._1, y._2, parent))
   def classBody(classMethods:List[(List[(ScalaMethod, AnyRef)], String)]) = {
@@ -243,5 +242,8 @@ s"""
     // Modified for handling Option type. Due to type erasure, we only get "Option", and not "Option[String]", etc
     val nameToUse = if (p.paraType.toString == "Lscala/Option;") p.paraName+optionTypePrefix else p.paraName
     "\""+nameToUse+"\""
+  }
+  def js(postUrl:String) = {
+    JSConstants.js
   }
 }
