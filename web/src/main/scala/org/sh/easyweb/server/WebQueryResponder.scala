@@ -1,4 +1,3 @@
-
 package org.sh.easyweb.server
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, OutputStreamWriter}
@@ -14,8 +13,8 @@ import org.sh.utils.encoding.Base64._
 
 class WebQueryResponder extends HttpServlet {
   import WebQueryResponder._
-  override def doGet(hReq:HReq, hResp:HResp) = doPost(hReq, hResp)
-  override def doPost(hReq:HReq, hResp:HResp) = {
+  override def doGet(hReq: HReq, hResp: HResp) = doPost(hReq, hResp)
+  override def doPost(hReq: HReq, hResp: HResp) = {
     hResp.setContentType("text/plain")
     hResp.getWriter.write(getResp(getReq(hReq))(Some(hReq.getRemoteHost)))
   }
@@ -24,44 +23,25 @@ class WebQueryResponder extends HttpServlet {
 object WebQueryResponder {
   //  FileStore
   //  FileStoreNIO
-  def getReq(hReq:HReq) = {
-    getReqOption(
-      hReq.getParameter("reqId"),
-      hReq.getParameter("pid"),
-      hReq.getParameter("reqName"),
-      hReq.getParameter("reqData"))
+  def getReq(hReq: HReq) = {
+    getReqOption(hReq.getParameter("reqId"), hReq.getParameter("pid"), hReq.getParameter("reqName"), hReq.getParameter("reqData"))
   }
 
-  DefaultTypeHandler.addType[Text](classOf[Text], new Text(_), _.getText /* text => throw new Exception("not supported") */)
-  
+  DefaultTypeHandler.addType[Text](classOf[Text], new Text(_), _.getText /* text => throw new Exception("not supported") */ )
+
   if (FileStore.isNioMode) {
     DefaultTypeHandler.addType[File](classOf[File], FileStoreNIO.getFile, FileStoreNIO.getFileLink)
-    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]],
-      files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"),
-      FileStoreNIO.getFileLinks
-    )
+    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]], files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"), FileStoreNIO.getFileLinks)
 
-    DefaultTypeHandler.addType[Path](classOf[Path], FileStoreNIO.getPath, FileStoreNIO.getPathLink )
-    DefaultTypeHandler.addType[Array[Path]](classOf[Array[Path]],
-      files => throw new Exception(s"No handler defined for converting 'String => Array[Path]'"),
-      FileStoreNIO.getPathLinks
-    )
+    DefaultTypeHandler.addType[Path](classOf[Path], FileStoreNIO.getPath, FileStoreNIO.getPathLink)
+    DefaultTypeHandler.addType[Array[Path]](classOf[Array[Path]], files => throw new Exception(s"No handler defined for converting 'String => Array[Path]'"), FileStoreNIO.getPathLinks)
 
-    DefaultTypeHandler.addType[HTML](classOf[HTML],
-      str => throw new Exception("No handler defined for converting 'String => HTML'") /* new HTML(_) */,
-      FileStoreNIO.getHTMLLink
-    )
+    DefaultTypeHandler.addType[HTML](classOf[HTML], str => throw new Exception("No handler defined for converting 'String => HTML'") /* new HTML(_) */, FileStoreNIO.getHTMLLink)
   } else {
     DefaultTypeHandler.addType[File](classOf[File], FileStore.getFile, FileStore.getFileLink)
-    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]],
-      files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"),
-      FileStore.getFileLinks
-    )
+    DefaultTypeHandler.addType[Array[File]](classOf[Array[File]], files => throw new Exception(s"No handler defined for converting 'String => Array[File]'"), FileStore.getFileLinks)
 
-    DefaultTypeHandler.addType[Path](classOf[Path],
-      x => FileStore.getFile(x).toPath,
-      files => throw new Exception(s"No handler defined for converting 'Path => String'")
-    )
+    DefaultTypeHandler.addType[Path](classOf[Path], x => FileStore.getFile(x).toPath, files => throw new Exception(s"No handler defined for converting 'Path => String'"))
     println(" File store using non-NIO")
   }
   // following will give problems because of type erasure. Seq[<something>] may be treated as Seq[File]
@@ -71,8 +51,8 @@ object WebQueryResponder {
   //  DefaultTypeHandler.addType[Set[File]](classOf[Set[File]], files => throw new Exception("not implemented"), getFileLinks)
   //  DefaultTypeHandler.addType[Iterable[File]](classOf[Iterable[File]], files => throw new Exception("not implemented"), getFileLinks)
   println("initializing file store")
-  
-  // note reqName = 
+
+  // note reqName =
   // reqID is an additional param for the client to sync requests. Its not needed for server. We just respond with same reqID
   // (see getReqResp below)
   // currently the client is setting reqID to be same as reqName
@@ -81,50 +61,50 @@ object WebQueryResponder {
   // following are additional handlers to do something with responses
   var onReq = Map[String, (Req, Option[String]) => _]() // String is source (IP address, etc)
   var onReqResp = Map[String, (Req, Resp, Option[String]) => _]() // String is source (IP address, etc)
-  def addToOnReqResp(id:String, on:(Req, Resp, Option[String]) => _) = {
-    if (onReqResp.contains(id)) throw new Exception("id already exists: "+id)
+  def addToOnReqResp(id: String, on: (Req, Resp, Option[String]) => _) = {
+    if (onReqResp.contains(id)) throw new Exception("id already exists: " + id)
     onReqResp += (id -> on)
   }
-  
-  def addToOnReq(id:String, on:(Req, Option[String]) => _) = {
-    if (onReq.contains(id)) throw new Exception("id already exists: "+id)
+
+  def addToOnReq(id: String, on: (Req, Option[String]) => _) = {
+    if (onReq.contains(id)) throw new Exception("id already exists: " + id)
     onReq += (id -> on)
   }
-  def removeFromOnReqResp(id:String) = {
-    if (onReqResp.contains(id)) onReqResp -= id 
-      else throw new Exception("id does not exist: "+id)
+  def removeFromOnReqResp(id: String) = {
+    if (onReqResp.contains(id)) onReqResp -= id
+    else throw new Exception("id does not exist: " + id)
   }
   def getOnReqRespIDs = onReqResp.map(_._1)
-  def getReqOption(reqID:String, pid:String, reqName:String, encodedReqData:String) = 
-    try Some(Req(reqID, pid, reqName, new String(decode(encodedReqData))))    
-    catch { case _:Throwable => None }
-  def getResp(req:Req):String = getResp(Some(req))
-  def getResp(req:Option[Req])(implicit reqSrc:Option[String] = None, sessionSecret:Option[String] = None):String = encodeResp(getReqResp(req)(reqSrc, sessionSecret))
-  def getReqResp(req:Option[Req])(implicit reqSrc:Option[String] = None, sessionSecret:Option[String] = None) = {
+  def getReqOption(reqID: String, pid: String, reqName: String, encodedReqData: String) =
+    try Some(Req(reqID, pid, reqName, new String(decode(encodedReqData))))
+    catch { case _: Throwable => None }
+  def getResp(req: Req): String = getResp(Some(req))
+  def getResp(req: Option[Req])(implicit reqSrc: Option[String] = None, sessionSecret: Option[String] = None): String = encodeResp(getReqResp(req)(reqSrc, sessionSecret))
+  def getReqResp(req: Option[Req])(implicit reqSrc: Option[String] = None, sessionSecret: Option[String] = None) = {
     req match {
-      case Some(rq@Req(reqID, pid, reqName, reqData)) => 
+      case Some(rq @ Req(reqID, pid, reqName, reqData)) =>
         val output = try {
-          onReq.foreach{case (id, on) => on(rq, reqSrc)} // don't use tryIt here because invoker may want to throw exception to deny access
-          QueryResponder.getResp(pid, reqName, reqData, false)(sessionSecret)  // false => don't use java serialization
-        } catch { 
+          onReq.foreach { case (id, on) => on(rq, reqSrc) } // don't use tryIt here because invoker may want to throw exception to deny access
+          QueryResponder.getResp(pid, reqName, reqData, false)(sessionSecret) // false => don't use java serialization
+        } catch {
           // // maybe add following two cases inside Proxy.getResponse ??
-          //  case e:InvocationTargetException => 
+          //  case e:InvocationTargetException =>
           //    if (debug) e.getCause.printStackTrace
           //    "Error: "+e.getCause.getMessage
-          //  case e:ExceptionInInitializerError => 
+          //  case e:ExceptionInInitializerError =>
           //    if (debug) e.getCause.printStackTrace
           //    // println("This will cause NoClassDefFoundError in further calls to this class")
           //    "Error: "+e.getCause.getMessage
-          case e:Throwable => 
-            "Error: "+e.getMessage
+          case e: Throwable =>
+            "Error: " + e.getMessage
         }
         val resp = Resp(reqID, pid, reqName, output)
-        onReqResp.foreach{case (id, on) => on(rq, resp, reqSrc)}
+        onReqResp.foreach { case (id, on) => on(rq, resp, reqSrc) }
         Some(resp)
       case _ => None
     }
   }
-  private def encodeResp(any:Option[Resp]) = any match {
+  private def encodeResp(any: Option[Resp]) = any match {
     case Some(Resp(reqID, pid, reqName, respData)) =>
       // reqID+":"+encodeBytes(respData.getBytes)  // <--------- original
       // reqID+":"+encodeBytes(uncompress(compress(respData)).getBytes) <------- testing compression/decompression
@@ -132,32 +112,32 @@ object WebQueryResponder {
       if (debug) {
         val normal = encodeBytes(respData.getBytes).size
         val zipped = compressed.size
-        println (s" [INFO:Compression:${this.getClass.getSimpleName}. Normal: ${normal}; zipped: ${zipped}; compression useful? ${normal > zipped} (${zipped.toDouble/normal})}] ")
+        println(s" [INFO:Compression:${this.getClass.getSimpleName}. Normal: ${normal}; zipped: ${zipped}; compression useful? ${normal > zipped} (${zipped.toDouble / normal})}] ")
       }
-      reqID+":"+compressed
-    case _ => 
-      "error:"+compress("No request found")
+      reqID + ":" + compressed
+    case _ =>
+      "error:" + compress("No request found")
   }
-  
-  def compress(s:String) = compressT[Char](s, a => a.mkString)
-  def uncompress(s:String) = uncompressT(s, a => a).mkString
-  
+
+  def compress(s: String) = compressT[Char](s, a => a.mkString)
+  def uncompress(s: String) = uncompressT(s, a => a).mkString
+
   //  def compressBytes(a:Array[Byte]) = compressT[Byte](a, b => b.map(_.toChar).mkString)
   //  def uncompressBytes (s:String) = uncompressT[Byte](s, _.map(_.toByte))
 
-  def compressT[T](u:Seq[T], seqTToString:Seq[T] => String) = {
+  def compressT[T](u: Seq[T], seqTToString: Seq[T] => String) = {
     val baos = new ByteArrayOutputStream
-    using(new OutputStreamWriter(new GZIPOutputStream(baos))){osw =>
+    using(new OutputStreamWriter(new GZIPOutputStream(baos))) { osw =>
       osw.write(seqTToString(u))
     }
 
     java.util.Base64.getEncoder.encodeToString(baos.toByteArray)
   }
-  def uncompressT[T](compressed:String, stringToSeqT:String => Seq[T]) = {
-    using(new GZIPInputStream(new ByteArrayInputStream(java.util.Base64.getDecoder.decode(compressed)))){is =>
+  def uncompressT[T](compressed: String, stringToSeqT: String => Seq[T]) = {
+    using(new GZIPInputStream(new ByteArrayInputStream(java.util.Base64.getDecoder.decode(compressed)))) { is =>
       stringToSeqT(scala.io.Source.fromInputStream(is).mkString)
     }
-  }  
+  }
 
   // Following for API response
   //   def getReqRespNoCatch(pid:String, reqName:String, reqDataJson:String, useJavaSerialization:Boolean = false) = getResp(pid, reqName, reqDataJson, useJavaSerialization)
