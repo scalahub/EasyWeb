@@ -1,4 +1,4 @@
-name := "auto_web"
+name := "EasyWeb"
 
 scalaVersion := "2.12.10"
 
@@ -10,7 +10,7 @@ val commonDependencies =
   libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
 
 // contains autowired client / server and code gen utils
-lazy val easy_web = project
+lazy val web = project
   .in(file("web"))
   .settings(
     commonResolvers,
@@ -19,7 +19,7 @@ lazy val easy_web = project
   )
 
 // below project contains the EmbeddedWebServer
-lazy val web_server = project
+lazy val webserver = project
   .in(file("webserver"))
   .settings(
     commonResolvers,
@@ -30,8 +30,8 @@ lazy val web_server = project
 lazy val root = project
   .in(file("."))
   .dependsOn(
-    web_server,
-    easy_web
+    webserver,
+    web
   )
 
 lazy val demo = (project in file("demo"))
