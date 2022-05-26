@@ -1,31 +1,52 @@
+name := "auto_web"
 
-name := "EasyWeb"
+scalaVersion := "2.12.10"
 
-version := "0.1"
-
-lazy val ScalaUtils = RootProject(uri("https://github.com/scalahub/ScalaUtils.git"))
-lazy val EasyMirror = RootProject(uri("https://github.com/scalahub/EasyMirror.git"))
-
-//lazy val ScalaUtils = RootProject(uri("../ScalaUtils"))
-//lazy val EasyMirror = RootProject(uri("../EasyMirror"))
-
-libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
-
-lazy val web = (project in file("web")).dependsOn(
-  EasyMirror % "compile->compile;test->test"
+val commonResolvers = resolvers ++= Seq(
+  "SonaType Snapshots s01" at "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 )
+
+val commonDependencies =
+  libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
+
+// contains autowired client / server and code gen utils
+lazy val easy_web = project
+  .in(file("web"))
+  .settings(
+    commonResolvers,
+    commonDependencies,
+    libraryDependencies += "io.github.scalahub" %% "easy_mirror" % "0.1.0-SNAPSHOT" % "compile->compile;test->tests"
+  )
 
 // below project contains the EmbeddedWebServer
-lazy val webserver = (project in file("webserver")).dependsOn(ScalaUtils)
+lazy val web_server = project
+  .in(file("webserver"))
+  .settings(
+    commonResolvers,
+    commonDependencies,
+    libraryDependencies += "io.github.scalahub" %% "scalautils" % "0.1.0-SNAPSHOT"
+  )
 
-lazy val root = (project in file(".")).dependsOn(
-  webserver, web
-)
+lazy val root = project
+  .in(file("."))
+  .dependsOn(
+    web_server,
+    easy_web
+  )
 
-lazy val demo = (project in file("demo")).dependsOn(
-  root,
-  EasyMirror % "compile->compile;test->test"
-).enablePlugins(JettyPlugin).settings(
-  mainClass in (Compile, run) := Some("org.sh.easyweb.MyBasicDemo"),
-  mainClass in (Test, run) := Some("org.sh.easyweb.WebDoubleProxyQueryMaker")
-)
+lazy val demo = (project in file("demo"))
+  .dependsOn(
+    root
+  )
+  .enablePlugins(JettyPlugin)
+  .settings(
+    Compile / run / mainClass := Some(
+      "org.sh.easyweb.MyBasicDemo"
+    ), // basic web page
+    Compile / run / mainClass := Some(
+      "org.sh.easyweb.WebDoubleProxyQueryMaker"
+    ), // proxy-proxy server
+    Compile / run / mainClass := Some(
+      "org.sh.easyweb.MyAdvancedDemo"
+    ) // various tests
+  )
