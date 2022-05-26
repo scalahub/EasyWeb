@@ -28,6 +28,7 @@ lazy val webserver = project
   )
 
 lazy val root = project
+  .aggregate(webserver, web)
   .in(file("."))
   .dependsOn(
     webserver,
