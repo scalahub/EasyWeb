@@ -15,7 +15,7 @@ lazy val web = project
   .settings(
     commonResolvers,
     commonDependencies,
-    libraryDependencies += "io.github.scalahub" %% "easy_mirror" % "0.1.0-SNAPSHOT" % "compile->compile;test->tests"
+    libraryDependencies += "io.github.scalahub" %% "easymirror" % "0.1.0-SNAPSHOT"
   )
 
 // below project contains the EmbeddedWebServer
