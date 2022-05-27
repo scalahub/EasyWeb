@@ -4,10 +4,6 @@ scalaVersion := "2.12.10"
 
 ThisBuild / version := "1.0"
 
-val commonResolvers = resolvers ++= Seq(
-  "SonaType" at "https://s01.oss.sonatype.org/content/repositories/releases"
-)
-
 val commonDependencies =
   libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
 
@@ -15,7 +11,6 @@ val commonDependencies =
 lazy val web = project
   .in(file("web"))
   .settings(
-    commonResolvers,
     commonDependencies,
     libraryDependencies += "io.github.scalahub" %% "easymirror" % "1.0"
   )
@@ -24,13 +19,12 @@ lazy val web = project
 lazy val webserver = project
   .in(file("webserver"))
   .settings(
-    commonResolvers,
     commonDependencies,
     libraryDependencies += "io.github.scalahub" %% "scalautils" % "1.0"
   )
 
 lazy val root = project
-  .aggregate(webserver, web)
+//  .aggregate(webserver, web)
   .in(file("."))
   .dependsOn(
     webserver,
