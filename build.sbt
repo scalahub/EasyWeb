@@ -2,8 +2,10 @@ name := "EasyWeb"
 
 scalaVersion := "2.12.10"
 
+ThisBuild / version := "1.0"
+
 val commonResolvers = resolvers ++= Seq(
-  "SonaType Snapshots s01" at "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+  "SonaType" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
 val commonDependencies =
@@ -15,7 +17,7 @@ lazy val web = project
   .settings(
     commonResolvers,
     commonDependencies,
-    libraryDependencies += "io.github.scalahub" %% "easymirror" % "0.1.0-SNAPSHOT"
+    libraryDependencies += "io.github.scalahub" %% "easymirror" % "1.0"
   )
 
 // below project contains the EmbeddedWebServer
@@ -24,7 +26,7 @@ lazy val webserver = project
   .settings(
     commonResolvers,
     commonDependencies,
-    libraryDependencies += "io.github.scalahub" %% "scalautils" % "0.1.0-SNAPSHOT"
+    libraryDependencies += "io.github.scalahub" %% "scalautils" % "1.0"
   )
 
 lazy val root = project
