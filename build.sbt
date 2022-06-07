@@ -2,7 +2,7 @@ name := "EasyWeb"
 
 scalaVersion := "2.12.10"
 
-ThisBuild / version := "1.1"
+ThisBuild / version := "1.2"
 
 lazy val commonDependencies =
   libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"

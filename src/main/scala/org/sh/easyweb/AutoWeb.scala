@@ -12,7 +12,7 @@ import org.sh.webserver.EmbeddedWebServer
   *                        For instance, to ignore methods called "bar" and "baz" in an "Foo" within package "org.my.app",
   *                        use List(("org.my.app.Foo", "bar"), ("org.my.app.Foo", "baz")). By default, this is an empty list.
   */
-object AutoWeb{
+object AutoWeb {
   val webDir = "src/main/webapp" // previously was "autoweb"
   val srcDir = "src/main/scala"
   val fileNamePrefix = ""
@@ -20,7 +20,11 @@ object AutoWeb{
   val prefix = ""
 }
 
-class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String, String)] = Nil) {
+class AutoWeb(
+    anyRefs: List[AnyRef],
+    appInfo: String,
+    ignoreMethodStr: List[(String, String)] = Nil
+) {
   import AutoWeb._
   FUtil.createDir(webDir)
 
@@ -33,26 +37,39 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
   )
 
   webAppGenerator.autoGenerateToFile(
-    fileNamePrefix, webDir, prefix
-  )(ignoreMethodStr.map{
+    fileNamePrefix,
+    webDir,
+    prefix
+  )(ignoreMethodStr.map {
     case (x, y) => (y, x) // need to fix this. Why do we need to reverse?
   })
 
   anyRefs.foreach(EasyProxy.addProcessor(prefix, _, DefaultTypeHandler, true))
   List("*Restricted*").foreach(EasyProxy.preventMethod)
-  new EmbeddedWebServer(8080, None,
+  new EmbeddedWebServer(
+    8080,
+    None,
     Array(s"$webDir/$htmlFile"),
     Seq(
-      ("/"+HTMLConstants.postUrl, classOf[org.sh.easyweb.server.WebQueryResponder]),
-      ("/"+HTMLConstants.fileUploadUrl, classOf[org.sh.easyweb.server.FileUploaderNIO]),
-      ("/"+HTMLConstants.fileDownloadUrl, classOf[org.sh.easyweb.server.FileDownloaderNIO])
+      (
+        "/" + HTMLConstants.postUrl,
+        classOf[org.sh.easyweb.server.WebQueryResponder]
+      ),
+      (
+        "/" + HTMLConstants.fileUploadUrl,
+        classOf[org.sh.easyweb.server.FileUploaderNIO]
+      ),
+      (
+        "/" + HTMLConstants.fileDownloadUrl,
+        classOf[org.sh.easyweb.server.FileDownloaderNIO]
+      )
     )
   )
 
-  case class BetterString(s:String) {
+  case class BetterString(s: String) {
     def clean = if (s.endsWith("$")) s.init else s
   }
-  implicit def stringToBetterString(s:String) = new BetterString(s)
+  implicit def stringToBetterString(s: String) = new BetterString(s)
 
   def generateInitServlet: AutoWeb = {
     val scalaSrcDir = s"$srcDir/easyweb"
@@ -73,7 +90,9 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
         |  class Initializer extends HttpServlet {
         |
         |    val anyRefs = List(
-        |      ${anyRefs.map(_.getClass.getCanonicalName.clean).reduceLeft(_+","+_)}
+        |      ${anyRefs
+        .map(_.getClass.getCanonicalName.clean)
+        .reduceLeft(_ + "," + _)}
         |    )
         |    anyRefs.foreach(EasyProxy.addProcessor("$prefix", _, DefaultTypeHandler, true))
         |    def getReq(hReq:HReq) = {}
@@ -122,6 +141,10 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
         |        <servlet-name>DownloadServlet</servlet-name>
         |        <servlet-class>org.sh.easyweb.server.FileDownloaderNIO</servlet-class>
         |    </servlet>
+        |    <servlet>
+        |        <servlet-name>PingServlet</servlet-name>
+        |        <servlet-class>org.sh.easyweb.server.PingServlet</servlet-class>
+        |    </servlet>
         |    <servlet-mapping>
         |        <servlet-name>QueryServlet</servlet-name>
         |        <url-pattern>/${HTMLConstants.postUrl}</url-pattern>
@@ -133,6 +156,10 @@ class AutoWeb(anyRefs:List[AnyRef], appInfo:String, ignoreMethodStr:List[(String
         |    <servlet-mapping>
         |        <servlet-name>DownloadServlet</servlet-name>
         |        <url-pattern>/${HTMLConstants.fileDownloadUrl}</url-pattern>
+        |    </servlet-mapping>
+        |    <servlet-mapping>
+        |        <servlet-name>PingServlet</servlet-name>
+        |        <url-pattern>/ping</url-pattern>
         |    </servlet-mapping>
         |
         |    <welcome-file-list>
