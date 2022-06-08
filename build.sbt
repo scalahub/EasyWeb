@@ -2,7 +2,7 @@ name := "EasyWeb"
 
 scalaVersion := "2.12.10"
 
-ThisBuild / version := "1.3"
+ThisBuild / version := "1.4"
 
 lazy val commonDependencies =
   libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
@@ -21,7 +21,7 @@ lazy val web = project
   .settings(
     commonDependencies,
     commonResolvers,
-    libraryDependencies += "io.github.scalahub" %% "easymirror" % "1.2"
+    libraryDependencies += "io.github.scalahub" %% "easymirror" % "1.3"
   )
 
 // below project contains the EmbeddedWebServer
